@@ -28,4 +28,4 @@ target_include_directories(${MY_LIBNAME} PRIVATE .)
 #    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 #    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-#target_link_libraries(${SDL2} ${SDL2main}) # X11)
+target_link_libraries(${MY_LIBNAME} ${SDL2} ${SDL2main} ${SDL2_image}) # X11)
