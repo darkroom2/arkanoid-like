@@ -13,5 +13,5 @@ foreach(LIBRARY ${LIBRARIES})
 endforeach(LIBRARY)
 
 # Could just use target_link_libraries(${PROJECT_NAME} ${LIBRARIES}), but
-# I write library name by-hand to aviod making changes in Framework's CMakeFile.txt
-target_link_libraries(${PROJECT_NAME} FrameworkRelease)
+# I write library name by-hand to aviod making too much changes in Framework's CMakeFile.txt
+target_link_libraries(${PROJECT_NAME} PRIVATE FrameworkRelease)
