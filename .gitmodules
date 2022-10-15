@@ -1,0 +1,3 @@
+[submodule "libs/Framework"]
+	path = libs/Framework
+	url = git@github.com:darkroom2/dragonslake-framework.git
