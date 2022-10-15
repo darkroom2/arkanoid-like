@@ -1,4 +1,4 @@
-#include "Framework.h"
+#include "../libs/Framework/inc/Framework.h"
 
 /* Test Framework realization */
 class MyFramework : public Framework {

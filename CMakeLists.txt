@@ -12,4 +12,6 @@ foreach(LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
 endforeach(LIBRARY)
 
-target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
+# Could just use target_link_libraries(${PROJECT_NAME} ${LIBRARIES}), but
+# I write library name by-hand to aviod making changes in Framework's CMakeFile.txt
+target_link_libraries(${PROJECT_NAME} FrameworkRelease)
