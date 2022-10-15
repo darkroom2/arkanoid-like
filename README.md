@@ -12,6 +12,7 @@
 
 ```shell
 # Inside projects root directory (where main CMakeLists.txt is located)
+
 sudo apt update
 sudo apt install g++ cmake libsdl2-dev libsdl2-image-dev
 
