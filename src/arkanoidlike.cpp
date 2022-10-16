@@ -8,8 +8,8 @@
 /* Test Framework realization */
 class ArkanoidLike : public Framework {
 private:
-    uint16_t window_width;
-    uint16_t window_height;
+    int window_width;
+    int window_height;
     bool window_fullscreen;
 
 public:
@@ -46,21 +46,19 @@ public:
     }
 
     virtual void onMouseMove(int x, int y, int xrelative, int yrelative) {
-
+        game->currentState->handleMouseMove(x, y, xrelative, yrelative);
     }
 
     virtual void onMouseButtonClick(FRMouseButton button, bool isReleased) {
-        if (button == FRMouseButton::LEFT && isReleased) {
-            if (game->currentState == game->states.at("StartGameState").get())
-                game->setCurrentState("GameplayGameState");
-        }
+        game->currentState->handleMouseKey(button, isReleased);
     }
 
     virtual void onKeyPressed(FRKey k) {
+        game->currentState->handleKey(k, true);
     }
 
     virtual void onKeyReleased(FRKey k) {
-
+        game->currentState->handleKey(k, false);
     }
 
     virtual const char *GetTitle() override {
