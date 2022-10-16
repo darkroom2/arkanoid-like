@@ -58,6 +58,11 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 * You should not do any changes in launch.cpp/Framework.h as part of a test task.
 * There is a sample project "Project", you can modify it or create your own.
 
+### Found Bugs
+
+* cmake not linking sdl2 library
+* png files include broken iCCP header
+
 # PL
 
 ## Zadanie
