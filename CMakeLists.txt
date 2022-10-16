@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBRARIES_DIR libs)
 set(LIBRARIES Framework cxxopts)
 
-add_executable(arkanoid-like src/arkanoidlike.cpp)
+add_executable(arkanoid-like src/arkanoidlike.cpp src/GameState.cpp include/GameState.h src/Game.cpp include/Game.h)
 
 foreach (LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")
