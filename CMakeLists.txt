@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(arkanoid-like)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
 set(LIBRARIES_DIR libs)
-set(LIBRARIES Framework)
+set(LIBRARIES Framework cxxopts)
 
 add_executable(arkanoid-like src/game.cpp)
 
@@ -14,4 +14,4 @@ endforeach(LIBRARY)
 
 # Could just use target_link_libraries(${PROJECT_NAME} ${LIBRARIES}), but
 # I write library name by-hand to aviod making too much changes in Framework's CMakeFile.txt
-target_link_libraries(${PROJECT_NAME} PRIVATE FrameworkRelease)
+target_link_libraries(${PROJECT_NAME} PRIVATE FrameworkRelease PUBLIC cxxopts)

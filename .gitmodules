@@ -1,3 +1,6 @@
 [submodule "libs/Framework"]
 	path = libs/Framework
 	url = git@github.com:darkroom2/dragonslake-framework.git
+[submodule "libs/cxxopts"]
+	path = libs/cxxopts
+	url = git@github.com:jarro2783/cxxopts.git
