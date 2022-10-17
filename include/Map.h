@@ -12,7 +12,7 @@
 
 class Map : public Entity {
 public:
-    explicit Map(Sprite *sprite = nullptr, int x = 0, int y = 0, int lines = 6, int columns = 11);
+    explicit Map(int x = 0, int y = 0, int lines = 6, int columns = 11);
     void update(unsigned int i) override;
 
 private:

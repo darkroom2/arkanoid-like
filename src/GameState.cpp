@@ -7,6 +7,7 @@
 
 
 GameState::GameState(Game *game, std::string &execPath) : game(game), execPath(execPath) {}
+
 GameState::~GameState() = default;
 
 
