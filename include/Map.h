@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <memory>
-#include "Brick.h"
+#include "Entity.h"
 
 class Map : public Entity {
 public:
