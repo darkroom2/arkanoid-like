@@ -15,7 +15,7 @@
 
 class Game {
 public:
-    explicit Game();
+    explicit Game(std::string &execPath);
 
     void update(unsigned int i);
 

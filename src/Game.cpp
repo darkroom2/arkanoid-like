@@ -5,9 +5,9 @@
 #include "../include/Game.h"
 
 
-Game::Game() {
-    addState("StartGameState", std::move(std::make_unique<StartGameState>(this)));
-    addState("GameplayGameState", std::move(std::make_unique<GameplayGameState>(this)));
+Game::Game(std::string &execPath) {
+    addState("StartGameState", std::move(std::make_unique<StartGameState>(this, execPath)));
+    addState("GameplayGameState", std::move(std::make_unique<GameplayGameState>(this, execPath)));
     setCurrentState("StartGameState");
 }
 

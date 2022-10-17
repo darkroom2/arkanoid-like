@@ -13,9 +13,10 @@ class Game;
 
 class GameState {
 public:
-    explicit GameState(Game *game);
+    GameState(Game *game, std::string &execPath);
     virtual ~GameState();
 
+    std::string &execPath;
     Game *game;
 
     virtual void update(unsigned int i) = 0;
@@ -26,7 +27,7 @@ public:
 
 class StartGameState : public GameState {
 public:
-    explicit StartGameState(Game *game);
+    StartGameState(Game *game, std::string &execPath);
 
     void update(unsigned int i) override;
 
@@ -39,7 +40,7 @@ public:
 
 class GameplayGameState : public GameState {
 public:
-    explicit GameplayGameState(Game *game);
+    GameplayGameState(Game *game, std::string &execPath);
 
     std::unique_ptr<Map> map;
 
