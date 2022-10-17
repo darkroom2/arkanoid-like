@@ -2,36 +2,35 @@
 #include "../include/Game.h"
 #include <cxxopts.hpp>
 #include <iostream>
-#include <filesystem>
 
 
 /* Test Framework realization */
 class ArkanoidLike : public Framework {
 private:
-    int window_width;
-    int window_height;
-    bool window_fullscreen;
+    int windowWidth;
+    int windowHeight;
+    bool windowFullscreen;
 
 public:
     explicit ArkanoidLike(
             uint16_t windowWidth = 600,
             uint16_t windowHeight = 800,
             bool windowFullscreen = false
-    ) : window_width(windowWidth),
-        window_height(windowHeight),
-        window_fullscreen(windowFullscreen) {
+    ) : windowWidth(windowWidth),
+        windowHeight(windowHeight),
+        windowFullscreen(windowFullscreen) {
     }
-
+    std::string execPath;
     std::unique_ptr<Game> game;
 
     virtual void PreInit(int &width, int &height, bool &fullscreen) {
-        width = window_width;
-        height = window_height;
-        fullscreen = window_fullscreen;
+        width = windowWidth;
+        height = windowHeight;
+        fullscreen = windowFullscreen;
     }
 
     virtual bool Init() {
-        game = std::make_unique<Game>();
+        game = std::make_unique<Game>(execPath);
         return true;
     }
 
@@ -70,9 +69,9 @@ public:
     }
 
     virtual void SetWindowSettings(int w, int h, bool fullscreen) {
-        window_width = w;
-        window_height = h;
-        window_fullscreen = fullscreen;
+        windowWidth = w;
+        windowHeight = h;
+        windowFullscreen = fullscreen;
     }
 };
 
@@ -82,6 +81,8 @@ int main(int argc, const char *argv[]) {
     try {
         std::unique_ptr<cxxopts::Options> allocated(new cxxopts::Options(argv[0], arkanoidlike->GetDescription()));
         auto &options = *allocated;
+
+        arkanoidlike->execPath = options.program();
 
         options.add_options()
                 ("h,help", "Print help")
