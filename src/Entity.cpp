@@ -2,19 +2,20 @@
 // Created by darkroom2 on 16/10/22.
 //
 
+#include <cmath>
 #include "../include/Entity.h"
+#include "../include/SpriteLoader.h"
 #include "../libs/Framework/inc/Framework.h"
 
 
 Entity::Entity(int x, int y) : x_pos(x), y_pos(y), width(0), height(0), currentState(EntityState::UNDEFINED) {}
 
 Entity::~Entity() {
-    if (!sprites_by_type.empty()) {
-        for (auto &sprite_type: sprites_by_type) {
-            destroySprite(sprite_type.second);
-            sprite_type.second = nullptr;
-        }
-    }
+//    if (!sprites_by_type.empty()) {
+//        for (auto &sprite_type: sprites_by_type) {
+//            destroySprite(sprite_type.second);
+//        }
+//    }
 }
 
 bool Entity::isColliding(const Entity &entity) const {
@@ -38,19 +39,33 @@ void Entity::setY(int y) {
     y_pos = y;
 }
 
-void Entity::addSprite(const std::string &path) {
-    auto s = createSprite(path.c_str());
-    int bw{};
-    int bh{};
-    getSpriteSize(s, bw, bh);
-    double hw_ratio = (double) bh / (double) bw;
-    getScreenSize(width, height);
-    int brick_width = (int) std::round((double) width / (double) columns);
-    int brick_height = (int) std::round(hw_ratio * brick_width);
-    setSpriteSize(s, brick_width, brick_height);
-    sprites_by_type.emplace(state, sprite);
-    currentState = state;
+void Entity::setDimensions(int w, int h) {
+    if (width == 0 || height == 0 || (w < 0 && h < 0))
+        return;
+
+    double ratio = (double) height / (double) width;
+
+    if (w > 0)
+        width = w;
+    else
+        width = (int) std::round(1 / ratio * h);
+
+    if (h > 0)
+        height = h;
+    else
+        height = (int) std::round(ratio * width);
+
+    for (auto &sprite_type: sprites_by_type) {
+        setSpriteSize(sprite_type.second, width, height);
+    }
 }
+
+void Entity::setPosition(int x, int y) {
+    x_pos = x;
+    y_pos = y;
+}
+
+Entity::Entity(const Entity &e) = default;
 
 
 Ball::Ball(int x, int y) : Entity(x, y) {}
@@ -63,7 +78,16 @@ Paddle::Paddle(int x, int y) : Entity(x, y) {}
 void Paddle::update(unsigned int i) {}
 
 
-Brick::Brick(int x, int y) : Entity(x, y) {}
+Brick::Brick(int x, int y, EntityColor color) : Entity(x, y) {
+    std::vector<EntityState> v{EntityState::NORMAL, EntityState::DAMAGED};
+    for (const auto &state: v) {
+        sprites_by_type.emplace(state, SpriteLoader::getSprite("brick", state, color));
+    }
+    currentState = EntityState::NORMAL;
+    getSpriteSize(sprites_by_type.at(currentState), width, height);
+}
+
+Brick::Brick(const Brick &b) = default;
 
 void Brick::update(unsigned int i) {
     if (sprites_by_type.contains(currentState))
@@ -71,6 +95,18 @@ void Brick::update(unsigned int i) {
 }
 
 
-Perk::Perk(int x, int y) : Entity(x, y) {}
+Perk::Perk(int x, int y) : Entity(x, y) {
+    std::vector<EntityState> v{EntityState::POSITIVE, EntityState::NEGATIVE};
+    for (const auto &state: v) {
+        sprites_by_type.emplace(state, SpriteLoader::getSprite("perk", state));
+    }
+    currentState = EntityState::POSITIVE;
+    getSpriteSize(sprites_by_type.at(currentState), width, height);
+}
 
-void Perk::update(unsigned int i) {}
+Perk::Perk(const Perk &p) = default;
+
+void Perk::update(unsigned int i) {
+    if (sprites_by_type.contains(currentState))
+        drawSprite(sprites_by_type.at(currentState), getX(), getY());
+}

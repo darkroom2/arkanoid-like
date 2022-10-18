@@ -19,6 +19,11 @@ enum class EntityState {
     UNDEFINED
 };
 
+enum class EntityColor {
+    GREEN,
+    RED
+};
+
 class Entity {
 public:
     int x_pos;
@@ -30,6 +35,8 @@ public:
     std::map<EntityState, Sprite *> sprites_by_type;
 
     explicit Entity(int x = 0, int y = 0);
+
+    Entity(const Entity &e);
 
     virtual ~Entity();
 
@@ -45,7 +52,11 @@ public:
 
     void setY(int y);
 
-    void addSprite(const std::string &path);
+    void setDimensions(int w = -1, int h = -1);
+
+    void setPosition(int x, int y);
+
+
 };
 
 class Ball : public Entity {
@@ -64,7 +75,9 @@ public:
 
 class Brick : public Entity {
 public:
-    explicit Brick(int x, int y);
+    explicit Brick(int x, int y, EntityColor color);
+
+    Brick(const Brick &b);
 
     void update(unsigned int i) override;
 };
@@ -72,6 +85,8 @@ public:
 class Perk : public Entity {
 public:
     explicit Perk(int x, int y);
+
+    Perk(const Perk &p);
 
     void update(unsigned int i) override;
 };
