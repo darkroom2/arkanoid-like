@@ -35,7 +35,8 @@ Map::Map(int x, int y, int w, int h, int lines, int columns) : Entity(x, y) {
         auto brickCopy = std::make_unique<Brick>(*brick2);
         brickCopy->setPosition(column * brickCopy->width, line * brickCopy->height);
         auto perkCopy = std::make_unique<Perk>(*perk);
-        perkCopy->setPosition((column * brickCopy->width) + brickCopy->width / 2 - perkCopy->width / 2, line * brickCopy->height);
+        perkCopy->setPosition((column * brickCopy->width) + brickCopy->width / 2 - perkCopy->width / 2,
+                              line * brickCopy->height);
         bricks.push_back(std::move(brickCopy));
         entities.push_back(std::move(perkCopy));
     }
