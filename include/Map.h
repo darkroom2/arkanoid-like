@@ -12,16 +12,13 @@
 
 class Map : public Entity {
 public:
-    explicit Map(int x = 0, int y = 0, int lines = 6, int columns = 11);
+    explicit Map(int x, int y, int width, int height, int lines, int columns);
 
     void update(unsigned int i) override;
 
 private:
     std::vector<std::unique_ptr<Brick>> bricks;
     std::vector<std::unique_ptr<Entity>> entities;
-
-    std::unique_ptr<Paddle> paddle;
-    std::unique_ptr<Ball> ball;
 };
 
 

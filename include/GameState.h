@@ -46,6 +46,8 @@ public:
     explicit GameplayGameState(Game *game);
 
     std::unique_ptr<Map> map;
+    std::unique_ptr<Paddle> paddle;
+    std::unique_ptr<Ball> ball;
 
     void update(unsigned int i) override;
 
