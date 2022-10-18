@@ -26,17 +26,19 @@ enum class EntityColor {
 
 class Entity {
 public:
-    int x_pos;
-    int y_pos;
-    int x_vel;
-    int y_vel;
+    double xPos;
+    double yPos;
+    double xVel;
+    double yVel;
+    double defaultX;
+    double defaultY;
     int width;
     int height;
 
     EntityState currentState;
-    std::map<EntityState, Sprite *> sprites_by_type;
+    std::map<EntityState, Sprite *> spritesByType;
 
-    explicit Entity(int x = 0, int y = 0);
+    explicit Entity(double x, double y);
 
     Entity(const Entity &e);
 
@@ -44,56 +46,52 @@ public:
 
     virtual void update(unsigned int i);
 
-    bool isColliding(const Entity &entity) const;
+    virtual bool isColliding(const Entity &entity) const;
 
-    int getX() const;
+    virtual void setDimensions(int w, int h);
 
-    int getY() const;
+    virtual void setPosition(double x, double y);
 
-    void setX(int x);
+    virtual void setVelocity(double vx, double vy);
 
-    void setY(int y);
-
-    void setDimensions(int w = -1, int h = -1);
-
-    void setPosition(int x, int y);
-
-    void setVelocity(int x, int y);
-
-
+    virtual void reset();
 };
 
 class Ball : public Entity {
 public:
-    explicit Ball(int x, int y);
+    explicit Ball(double x, double y);
 
     Ball(const Ball &b);
 
-    void setAngle(int mouse_x, int mouse_y);
+    void setDirection(int mouseX, int mouseY);
+
     void release();
 
-    int dirX;
-    int dirY;
+    double dirX;
+    double dirY;
+    double speed;
     bool released;
+
+    void reset() override;
 };
 
 class Paddle : public Entity {
 public:
-    explicit Paddle(int x, int y);
+    explicit Paddle(double x, double y);
 
     Paddle(const Paddle &p);
 };
 
 class Brick : public Entity {
 public:
-    explicit Brick(int x, int y, EntityColor color);
+    explicit Brick(double x, double y, EntityColor color);
 
     Brick(const Brick &b);
 };
 
 class Perk : public Entity {
 public:
-    explicit Perk(int x, int y);
+    explicit Perk(double x, double y);
 
     Perk(const Perk &p);
 };

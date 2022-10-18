@@ -6,15 +6,15 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Rules
 
-* It is required to use our framework. We do not accept solutions created using other libraries (like SFML, SDL2 etc).
+* **It is required to use our framework. We do not accept solutions created using other libraries (like SFML, SDL2 etc).
   Functionality provided by Framework should be enough to do all required drawing. You can load TGA, JPG and PNG images
-  as sprites with it.
-* We have included all necessary assets in the folder “Data”. You can use these or any other assets which you want.
-* Window size should be possible to set from the command-line, e.g.: game -window 800x600
+  as sprites with it.**
+* **We have included all necessary assets in the folder “Data”. You can use these or any other assets which you want.**
+* **Window size should be possible to set from the command-line, e.g.: game -window 800x600**
 
 ### Overview
 
-* The player controls a platform which can move left and right. The goal is to destroy all blocks by deflecting the ball
+* **The player controls a platform which can move left and right**. The goal is to destroy all blocks by deflecting the ball
   with the platform.
 
 > **_Note:_** it is not required to make level switching for this task (one game level is enough). However, you can make
@@ -22,12 +22,12 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Player
 
-* The player can move a platform using left and right arrow keyboard buttons. Initially the player can choose the angle
-  of the ball by pressing the left mouse button (the ball should be launched in the direction of the mouse cursor).
+* **The player can move a platform using left and right arrow keyboard buttons. Initially the player can choose the angle
+  of the ball by pressing the left mouse button (the ball should be launched in the direction of the mouse cursor).**
 
 ### Ball
 
-* The ball moves linearly with a constant speed. It reflects from edges, blocks and the player's platform.
+* **The ball moves linearly with a constant speed**. It reflects from edges, blocks and the player's platform.
 
 ### Environment
 
