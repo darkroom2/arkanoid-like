@@ -1,5 +1,6 @@
 #include "../libs/Framework/inc/Framework.h"
 #include "../include/Game.h"
+#include "../include/SpriteLoader.h"
 #include <cxxopts.hpp>
 #include <iostream>
 
@@ -20,6 +21,7 @@ public:
         windowHeight(windowHeight),
         windowFullscreen(windowFullscreen) {
     }
+
     std::string execPath;
     std::unique_ptr<Game> game;
 
@@ -30,7 +32,8 @@ public:
     }
 
     virtual bool Init() {
-        game = std::make_unique<Game>(execPath);
+        SpriteLoader::init(execPath);
+        game = std::make_unique<Game>();
         return true;
     }
 
