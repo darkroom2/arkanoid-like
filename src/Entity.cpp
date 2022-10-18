@@ -65,17 +65,36 @@ void Entity::setPosition(int x, int y) {
     y_pos = y;
 }
 
+void Entity::update(unsigned int i) {
+    if (sprites_by_type.contains(currentState))
+        drawSprite(sprites_by_type.at(currentState), getX(), getY());
+}
+
 Entity::Entity(const Entity &e) = default;
 
 
-Ball::Ball(int x, int y) : Entity(x, y) {}
+Ball::Ball(int x, int y) : Entity(x, y) {
+    std::vector<EntityState> v{EntityState::NORMAL};
+    for (const auto &state: v) {
+        sprites_by_type.emplace(state, SpriteLoader::getSprite("ball", state));
+    }
+    currentState = EntityState::NORMAL;
+    getSpriteSize(sprites_by_type.at(currentState), width, height);
+}
 
-void Ball::update(unsigned int i) {}
+Ball::Ball(const Ball &b) = default;
 
 
-Paddle::Paddle(int x, int y) : Entity(x, y) {}
+Paddle::Paddle(int x, int y) : Entity(x, y) {
+    std::vector<EntityState> v{EntityState::NORMAL};
+    for (const auto &state: v) {
+        sprites_by_type.emplace(state, SpriteLoader::getSprite("paddle", state));
+    }
+    currentState = EntityState::NORMAL;
+    getSpriteSize(sprites_by_type.at(currentState), width, height);
+}
 
-void Paddle::update(unsigned int i) {}
+Paddle::Paddle(const Paddle &p) = default;
 
 
 Brick::Brick(int x, int y, EntityColor color) : Entity(x, y) {
@@ -89,11 +108,6 @@ Brick::Brick(int x, int y, EntityColor color) : Entity(x, y) {
 
 Brick::Brick(const Brick &b) = default;
 
-void Brick::update(unsigned int i) {
-    if (sprites_by_type.contains(currentState))
-        drawSprite(sprites_by_type.at(currentState), getX(), getY());
-}
-
 
 Perk::Perk(int x, int y) : Entity(x, y) {
     std::vector<EntityState> v{EntityState::POSITIVE, EntityState::NEGATIVE};
@@ -105,8 +119,3 @@ Perk::Perk(int x, int y) : Entity(x, y) {
 }
 
 Perk::Perk(const Perk &p) = default;
-
-void Perk::update(unsigned int i) {
-    if (sprites_by_type.contains(currentState))
-        drawSprite(sprites_by_type.at(currentState), getX(), getY());
-}

@@ -17,9 +17,11 @@ public:
     void update(unsigned int i) override;
 
 private:
-    // TODO: try with pointers again
-    std::vector<Brick> bricks;
-    std::vector<Entity*> entities;
+    std::vector<std::unique_ptr<Brick>> bricks;
+    std::vector<std::unique_ptr<Entity>> entities;
+
+    std::unique_ptr<Paddle> paddle;
+    std::unique_ptr<Ball> ball;
 };
 
 
