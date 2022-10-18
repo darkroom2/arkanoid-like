@@ -25,45 +25,45 @@ public:
     std::string execPath;
     std::unique_ptr<Game> game;
 
-    virtual void PreInit(int &width, int &height, bool &fullscreen) {
+    void PreInit(int &width, int &height, bool &fullscreen) override {
         width = windowWidth;
         height = windowHeight;
         fullscreen = windowFullscreen;
     }
 
-    virtual bool Init() {
+    bool Init() override {
         SpriteLoader::init(execPath);
         game = std::make_unique<Game>();
         return true;
     }
 
-    virtual void Close() {
+    void Close() override {
         SpriteLoader::clearSprites();
     }
 
-    virtual bool Tick() {
+    bool Tick() override {
         auto ticks = getTickCount();
         game->update(ticks);
         return false;
     }
 
-    virtual void onMouseMove(int x, int y, int xrelative, int yrelative) {
+    void onMouseMove(int x, int y, int xrelative, int yrelative) override {
         game->currentState->handleMouseMove(x, y, xrelative, yrelative);
     }
 
-    virtual void onMouseButtonClick(FRMouseButton button, bool isReleased) {
+    void onMouseButtonClick(FRMouseButton button, bool isReleased) override {
         game->currentState->handleMouseKey(button, isReleased);
     }
 
-    virtual void onKeyPressed(FRKey k) {
+    void onKeyPressed(FRKey k) override {
         game->currentState->handleKey(k, true);
     }
 
-    virtual void onKeyReleased(FRKey k) {
+    void onKeyReleased(FRKey k) override {
         game->currentState->handleKey(k, false);
     }
 
-    virtual const char *GetTitle() override {
+    const char *GetTitle() override {
         return "Arcanoid Like";
     }
 

@@ -8,7 +8,7 @@
 #include "../libs/Framework/inc/Framework.h"
 
 
-Entity::Entity(int x, int y) : x_pos(x), y_pos(y), width(0), height(0), currentState(EntityState::UNDEFINED) {}
+Entity::Entity(int x, int y) : x_pos(x), y_pos(y), x_vel(0), y_vel(0), width(0), height(0), currentState(EntityState::UNDEFINED) {}
 
 Entity::~Entity() = default;
 
@@ -59,21 +59,39 @@ void Entity::setPosition(int x, int y) {
     y_pos = y;
 }
 
+void Entity::setVelocity(int vx, int vy) {
+    x_vel = vx;
+    y_vel = vy;
+}
+
 void Entity::update(unsigned int i) {
     if (sprites_by_type.contains(currentState))
-        drawSprite(sprites_by_type.at(currentState), getX(), getY());
+        drawSprite(sprites_by_type.at(currentState), x_pos, y_pos);
+    x_pos += x_vel;
+    y_pos += y_vel;
 }
 
 Entity::Entity(const Entity &e) = default;
 
 
-Ball::Ball(int x, int y) : Entity(x, y) {
+Ball::Ball(int x, int y) : Entity(x, y), dirX(0), dirY(0), released(false) {
     std::vector<EntityState> v{EntityState::NORMAL};
     for (const auto &state: v) {
         sprites_by_type.emplace(state, SpriteLoader::getSprite("ball", state));
     }
     currentState = EntityState::NORMAL;
     getSpriteSize(sprites_by_type.at(currentState), width, height);
+}
+
+void Ball::setAngle(int mouse_x, int mouse_y) {
+    double angle = (double) (mouse_y - y_pos) / (double) (mouse_x - x_pos);
+    dirX = mouse_x - x_pos > 0 ? 1 : -1;
+    dirY = -1;
+}
+
+void Ball::release() {
+    setVelocity(dirX, dirY);
+    released = true;
 }
 
 Ball::Ball(const Ball &b) = default;

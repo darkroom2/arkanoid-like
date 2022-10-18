@@ -28,6 +28,8 @@ class Entity {
 public:
     int x_pos;
     int y_pos;
+    int x_vel;
+    int y_vel;
     int width;
     int height;
 
@@ -56,6 +58,8 @@ public:
 
     void setPosition(int x, int y);
 
+    void setVelocity(int x, int y);
+
 
 };
 
@@ -64,6 +68,13 @@ public:
     explicit Ball(int x, int y);
 
     Ball(const Ball &b);
+
+    void setAngle(int mouse_x, int mouse_y);
+    void release();
+
+    int dirX;
+    int dirY;
+    bool released;
 };
 
 class Paddle : public Entity {
