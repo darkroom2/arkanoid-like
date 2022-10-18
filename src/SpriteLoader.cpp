@@ -14,8 +14,7 @@ void SpriteLoader::init(const std::string &execPath) {
     std::filesystem::path execFile{execPath};
     dataDir = execFile.parent_path() / "data";
     for (const auto &entry: std::filesystem::recursive_directory_iterator(dataDir)) {
-        auto s = createSprite(entry.path().c_str());
-        sprites.emplace(entry.path().stem(), s);
+        sprites.emplace(entry.path().stem(), createSprite(entry.path().c_str()));
     }
     typeMapping = {
             {EntityState::NORMAL,   "normal"},
@@ -50,4 +49,10 @@ std::string SpriteLoader::_prepareFilename(std::vector<std::string> vec) {
             result.append("-");
     }
     return result;
+}
+
+void SpriteLoader::clearSprites() {
+    for (auto &entry: sprites) {
+        destroySprite(entry.second);
+    }
 }

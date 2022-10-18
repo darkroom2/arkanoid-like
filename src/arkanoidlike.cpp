@@ -38,7 +38,7 @@ public:
     }
 
     virtual void Close() {
-
+        SpriteLoader::clearSprites();
     }
 
     virtual bool Tick() {

@@ -28,6 +28,8 @@ public:
     static Sprite *getSprite(const std::string &name, EntityState state, EntityColor color);
 
     static void init(const std::string &execPath);
+
+    static void clearSprites();
 };
 
 
