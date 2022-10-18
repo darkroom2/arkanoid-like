@@ -6,12 +6,12 @@
 #include "../include/Game.h"
 
 
-GameState::GameState(Game *game, std::string &execPath) : game(game), execPath(execPath) {}
+GameState::GameState(Game *game) : game(game) {}
 
 GameState::~GameState() = default;
 
 
-StartGameState::StartGameState(Game *game, std::string &execPath) : GameState(game, execPath) {}
+StartGameState::StartGameState(Game *game) : GameState(game) {}
 
 void StartGameState::update(unsigned int i) {}
 
@@ -27,7 +27,7 @@ void StartGameState::handleMouseKey(FRMouseButton button, bool released) {
 }
 
 
-GameplayGameState::GameplayGameState(Game *game, std::string &execPath) : GameState(game, execPath), map(std::make_unique<Map>()) {}
+GameplayGameState::GameplayGameState(Game *game) : GameState(game), map(std::make_unique<Map>()) {}
 
 void GameplayGameState::update(unsigned int i) {
     map->update(i);
