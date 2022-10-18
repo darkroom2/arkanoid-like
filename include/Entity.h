@@ -40,7 +40,7 @@ public:
 
     virtual ~Entity();
 
-    virtual void update(unsigned int i) = 0;
+    virtual void update(unsigned int i);
 
     bool isColliding(const Entity &entity) const;
 
@@ -63,14 +63,14 @@ class Ball : public Entity {
 public:
     explicit Ball(int x, int y);
 
-    void update(unsigned int i) override;
+    Ball(const Ball &b);
 };
 
 class Paddle : public Entity {
 public:
     explicit Paddle(int x, int y);
 
-    void update(unsigned int i) override;
+    Paddle(const Paddle &p);
 };
 
 class Brick : public Entity {
@@ -78,8 +78,6 @@ public:
     explicit Brick(int x, int y, EntityColor color);
 
     Brick(const Brick &b);
-
-    void update(unsigned int i) override;
 };
 
 class Perk : public Entity {
@@ -87,8 +85,6 @@ public:
     explicit Perk(int x, int y);
 
     Perk(const Perk &p);
-
-    void update(unsigned int i) override;
 };
 
 #endif //ARKANOID_LIKE_ENTITY_H
