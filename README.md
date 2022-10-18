@@ -25,3 +25,7 @@ cmake --build build --target arkanoid-like
 ```shell
 ./build/arkanoid-like
 ```
+
+## TODO
+
+* Game as shared_ptr<Game>

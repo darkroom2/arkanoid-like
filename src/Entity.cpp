@@ -10,13 +10,7 @@
 
 Entity::Entity(int x, int y) : x_pos(x), y_pos(y), width(0), height(0), currentState(EntityState::UNDEFINED) {}
 
-Entity::~Entity() {
-//    if (!sprites_by_type.empty()) {
-//        for (auto &sprite_type: sprites_by_type) {
-//            destroySprite(sprite_type.second);
-//        }
-//    }
-}
+Entity::~Entity() = default;
 
 bool Entity::isColliding(const Entity &entity) const {
     return getX() < entity.getX() + entity.width && getX() + width > entity.getX() &&
