@@ -15,13 +15,11 @@
 
 class Game {
 public:
-    explicit Game(std::string &execPath);
+    Game();
 
     void update(unsigned int i);
 
     virtual ~Game();
-
-    std::vector<Sprite *> sprites;
 
     GameState *currentState;
 

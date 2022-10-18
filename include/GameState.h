@@ -13,21 +13,24 @@ class Game;
 
 class GameState {
 public:
-    GameState(Game *game, std::string &execPath);
+    explicit GameState(Game *game);
+
     virtual ~GameState();
 
-    std::string &execPath;
     Game *game;
 
     virtual void update(unsigned int i) = 0;
+
     virtual void handleKey(FRKey key, bool pressed) = 0;
+
     virtual void handleMouseMove(int x, int y, int xrel, int yrel) = 0;
+
     virtual void handleMouseKey(FRMouseButton button, bool released) = 0;
 };
 
 class StartGameState : public GameState {
 public:
-    StartGameState(Game *game, std::string &execPath);
+    explicit StartGameState(Game *game);
 
     void update(unsigned int i) override;
 
@@ -40,7 +43,7 @@ public:
 
 class GameplayGameState : public GameState {
 public:
-    GameplayGameState(Game *game, std::string &execPath);
+    explicit GameplayGameState(Game *game);
 
     std::unique_ptr<Map> map;
 
