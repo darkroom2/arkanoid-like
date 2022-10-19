@@ -14,8 +14,8 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Overview
 
-* **The player controls a platform which can move left and right**. The goal is to destroy all blocks by deflecting the ball
-  with the platform.
+* **The player controls a platform which can move left and right. The goal is to destroy all blocks by deflecting the ball
+  with the platform.**
 
 > **_Note:_** it is not required to make level switching for this task (one game level is enough). However, you can make
 > more levels if you want.
@@ -27,18 +27,18 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Ball
 
-* **The ball moves linearly with a constant speed**. It reflects from edges, blocks and the player's platform.
+* **The ball moves linearly with a constant speed. It reflects from edges, blocks and the player's platform.**
 
 ### Environment
 
-* The level consists of blocks, which could be destroyed by a single hit. The ball should reflect from blocks after
-  their destruction.
+* **The level consists of blocks, which could be destroyed by a single hit. The ball should reflect from blocks after
+  their destruction.**
 
 ### Win/loss conditions
 
-* The player loses when the ball is not caught by the platform. Victory can be achieved by destroying all blocks and
-  catching the ball with the platform after.
-* The game should be restarted after victory/loss.
+* **The player loses when the ball is not caught by the platform. Victory can be achieved by destroying all blocks and
+  catching the ball with the platform after.**
+* **The game should be restarted after victory/loss.**
 
 ### Features
 
@@ -55,8 +55,8 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Restrictions
 
-* You should not do any changes in launch.cpp/Framework.h as part of a test task.
-* There is a sample project "Project", you can modify it or create your own.
+* **You should not do any changes in launch.cpp/Framework.h as part of a test task.**
+* **There is a sample project "Project", you can modify it or create your own.**
 
 ### Found Bugs
 
