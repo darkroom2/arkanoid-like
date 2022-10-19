@@ -35,6 +35,8 @@ public:
     int width;
     int height;
 
+    bool alive;
+
     EntityState currentState;
     std::map<EntityState, Sprite *> spritesByType;
 
@@ -54,7 +56,11 @@ public:
 
     virtual void setVelocity(double vx, double vy);
 
-    virtual void reset();
+    virtual void resetPos();
+
+    virtual void takeDamage();
+
+    virtual void resetState();
 };
 
 class Ball : public Entity {
@@ -65,18 +71,26 @@ public:
 
     void setDirection(int mouseX, int mouseY);
 
-    void release();
-
     double dirX;
     double dirY;
     double speed;
     bool released;
 
-    void reset() override;
+    void release();
+
+    void bounceX();
+
+    void bounceY();
+
+    bool lossCondition() const;
+
+    void resetState() override;
 };
 
 class Paddle : public Entity {
 public:
+    double speed;
+
     explicit Paddle(double x, double y);
 
     Paddle(const Paddle &p);
@@ -87,6 +101,8 @@ public:
     explicit Brick(double x, double y, EntityColor color);
 
     Brick(const Brick &b);
+
+    void takeDamage() override;
 };
 
 class Perk : public Entity {

@@ -56,6 +56,10 @@ public:
     void handleMouseMove(int x, int y, int xrel, int yrel) override;
 
     void handleMouseKey(FRMouseButton button, bool released) override;
+
+    void resetState();
+
+    void changeState(const std::string &name);
 };
 
 

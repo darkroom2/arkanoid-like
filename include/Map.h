@@ -16,9 +16,16 @@ public:
 
     void update(unsigned int i) override;
 
+    bool isColliding(const Entity &entity) const override;
+
+    bool winCondition() const;
+
 private:
     std::vector<std::unique_ptr<Brick>> bricks;
     std::vector<std::unique_ptr<Entity>> entities;
+
+    void removeBricks();
+
 };
 
 

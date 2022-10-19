@@ -9,13 +9,13 @@
 
 
 Entity::Entity(double x, double y) : xPos(x), yPos(y), defaultX(0), defaultY(0), xVel(0), yVel(0), width(0), height(0),
-                                     currentState(EntityState::UNDEFINED) {}
+                                     currentState(EntityState::UNDEFINED), alive(true) {}
 
 Entity::~Entity() = default;
 
 bool Entity::isColliding(const Entity &entity) const {
-    return xPos < entity.xPos + entity.width && xPos + width > entity.xPos &&
-           yPos > entity.yPos + entity.height && yPos + height < entity.yPos;
+    return xPos > entity.xPos && xPos < entity.xPos + entity.width && yPos > entity.yPos &&
+           yPos < entity.yPos + entity.height;
 }
 
 void Entity::setDimensions(int w, int h) {
@@ -59,15 +59,25 @@ void Entity::update(unsigned int i) {
     yPos += yVel;
 }
 
-void Entity::reset() {
+void Entity::resetPos() {
     setVelocity(0, 0);
     setPosition(defaultX, defaultY);
+}
+
+void Entity::takeDamage() {
+    alive = false;
+}
+
+void Entity::resetState() {
+    currentState = EntityState::NORMAL;
+    alive = true;
+    resetPos();
 }
 
 Entity::Entity(const Entity &e) = default;
 
 
-Ball::Ball(double x, double y) : Entity(x, y), dirX(0), dirY(0), speed(5), released(false) {
+Ball::Ball(double x, double y) : Entity(x, y), dirX(0), dirY(0), speed(0.5), released(false) {
     std::vector<EntityState> v{EntityState::NORMAL};
     for (const auto &state: v) {
         spritesByType.emplace(state, SpriteLoader::getSprite("ball", state));
@@ -89,15 +99,27 @@ void Ball::release() {
     released = true;
 }
 
-void Ball::reset() {
-    Entity::reset();
+void Ball::bounceX() {
+    xVel = -1 * xVel;
+}
+
+void Ball::bounceY() {
+    yVel = -1 * yVel;
+}
+
+bool Ball::lossCondition() const {
+    return !alive;
+}
+
+void Ball::resetState() {
+    Entity::resetState();
     released = false;
 }
 
 Ball::Ball(const Ball &b) = default;
 
 
-Paddle::Paddle(double x, double y) : Entity(x, y) {
+Paddle::Paddle(double x, double y) : Entity(x, y), speed(0.5) {
     std::vector<EntityState> v{EntityState::NORMAL};
     for (const auto &state: v) {
         spritesByType.emplace(state, SpriteLoader::getSprite("paddle", state));
@@ -114,8 +136,17 @@ Brick::Brick(double x, double y, EntityColor color) : Entity(x, y) {
     for (const auto &state: v) {
         spritesByType.emplace(state, SpriteLoader::getSprite("brick", state, color));
     }
-    currentState = EntityState::NORMAL;
+    currentState = EntityState::DAMAGED;
     getSpriteSize(spritesByType.at(currentState), width, height);
+}
+
+void Brick::takeDamage() {
+    // for bricks to be one-hit killable I set the state to be DAMAGED in Brick constructor
+    if (currentState == EntityState::DAMAGED) {
+        alive = false;
+    } else {
+        currentState = EntityState::DAMAGED;
+    }
 }
 
 Brick::Brick(const Brick &b) = default;

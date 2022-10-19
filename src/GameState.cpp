@@ -32,8 +32,8 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     int w{}, h{};
     getScreenSize(w, h);
 
-    int brickLines = 6;
-    int brickColumns = 11;
+    int brickLines = 1;
+    int brickColumns = 2;
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
 
     int borderPadding = 5;
@@ -49,20 +49,71 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 }
 
 void GameplayGameState::update(unsigned int i) {
+    if (ball->lossCondition()) {
+        changeState("StartGameState");
+        return;
+    }
+    if (ball->isColliding(*paddle)) {
+        if (map->winCondition()) {
+            changeState("StartGameState");
+            return;
+        }
+        ball->bounceY();
+    }
+
     map->update(i);
-    paddle->update(i);
     ball->update(i);
+    paddle->update(i);
+
+    if (ball->yPos > map->height) {
+        ball->takeDamage();
+    }
+
+    if (paddle->xPos < 0) {
+        paddle->xPos = 0;
+        if (!ball->released) {
+            ball->xPos = paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2;
+        }
+    }
+    if (paddle->xPos > map->width - paddle->width) {
+        paddle->xPos = map->width - paddle->width;
+        if (!ball->released) {
+            ball->xPos = paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2;
+        }
+    }
+    else if (ball->xPos < 0)
+    {
+        ball->xPos = 0;
+        ball->bounceX();
+    }
+    else if (ball->xPos > map->width - ball->width)
+    {
+        ball->xPos = map->width - ball->width;
+        ball->bounceX();
+    }
+
+    // kolizje piłki z brickami
+    if (map->isColliding(*ball)) {
+        ball->bounceY();
+    }
+}
+
+void GameplayGameState::changeState(const std::string &name) {
+    resetState();
+    game->setCurrentState(name);
 }
 
 void GameplayGameState::handleKey(FRKey key, bool pressed) {
     if (key == FRKey::LEFT) {
-        paddle->setVelocity(pressed ? -5 : 0, 0);
-        if (!ball->released)
-            ball->setVelocity(pressed ? -5 : 0, 0);
+        paddle->setVelocity(pressed ? -paddle->speed : 0, 0);
+        if (!ball->released) {
+            ball->setVelocity(pressed ? -paddle->speed : 0, 0);
+        }
     } else if (key == FRKey::RIGHT) {
-        paddle->setVelocity(pressed ? 5 : 0, 0);
-        if (!ball->released)
-            ball->setVelocity(pressed ? 5 : 0, 0);
+        paddle->setVelocity(pressed ? paddle->speed : 0, 0);
+        if (!ball->released) {
+            ball->setVelocity(pressed ? paddle->speed : 0, 0);
+        }
     }
 }
 
@@ -76,7 +127,15 @@ void GameplayGameState::handleMouseKey(FRMouseButton button, bool released) {
             ball->release();
     }
     if (button == FRMouseButton::RIGHT && released) {
-        ball->reset();
-        paddle->reset();
+        ball->resetState();
+        paddle->resetState();
     }
+}
+
+void GameplayGameState::resetState() {
+    int brickLines = 1;
+    int brickColumns = 2;
+    map = std::make_unique<Map>(0, 0, map->width, map->height, brickLines, brickColumns);
+    paddle->resetState();
+    ball->resetState();
 }
