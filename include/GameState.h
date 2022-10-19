@@ -45,9 +45,18 @@ class GameplayGameState : public GameState {
 public:
     explicit GameplayGameState(Game *game);
 
+    int brickLines;
+    int brickColumns;
+    int maxPerkTime;
+    int currentPerkTime;
+    unsigned int currentTime{0};
+    unsigned int lastTime{0};
+
+
     std::unique_ptr<Map> map;
     std::unique_ptr<Paddle> paddle;
     std::unique_ptr<Ball> ball;
+
 
     void update(unsigned int i) override;
 

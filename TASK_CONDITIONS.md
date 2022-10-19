@@ -44,8 +44,8 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 * There is an enemy turret, which randomly moves and shoots a player. Bullets spawned by a turret should pass through
   blocks and not destroy them. Game ends if the player is hit by a bullet.
-* There are Red blocks, which could be destroyed only when all other blocks have been destroyed. You can use any color
-  which you want.
+* **There are Red blocks, which could be destroyed only when all other blocks have been destroyed. You can use any color
+  which you want.**
 * The first ability (positive) increases the size of the platform and the second one (negative) decreases it by 40%.
   Ability stays active for 20 seconds. Abilities are “stackable”, it means that it is possible to have multiple active
   instances of the same ability. Minimum size is 50%, maximum is 200% of a default size.

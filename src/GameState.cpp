@@ -32,20 +32,24 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     int w{}, h{};
     getScreenSize(w, h);
 
-    int brickLines = 2;
-    int brickColumns = 2;
+    brickLines = 3;
+    brickColumns = 5;
+    maxPerkTime = 20;
+    currentPerkTime = 0;
+
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
 
     int borderPadding = 5;
     int paddleProportion = 5;
     int paddleWidth = (int) std::round((double) w / (double) paddleProportion);
     paddle = std::make_unique<Paddle>(0, 0);
+    paddle->setDefaultWidth(paddleWidth);
     paddle->setDimensions(paddleWidth, 0);
-    paddle->setPosition((double) w / 2 - (double) paddle->width / 2, h - paddle->height - borderPadding);
+    paddle->setPosition((double) w / 2 - (double) paddle->defaultWidth / 2, h - paddle->height - borderPadding);
 
     ball = std::make_unique<Ball>(0, 0);
     ball->setDimensions(0, paddle->height / 2);
-    ball->setPosition(paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2,
+    ball->setPosition(paddle->xPos + (double) paddle->defaultWidth / 2 - (double) ball->width / 2,
                       paddle->yPos - ball->height);
 }
 
@@ -91,12 +95,30 @@ void GameplayGameState::update(unsigned int i) {
     } else if (ball->xPos > map->width - ball->width) {
         ball->xPos = map->width - ball->width;
         ball->bounceX();
+    } else if (ball->yPos < 0) {
+        ball->yPos = 0;
+        ball->bounceY();
     }
 
     // kolizje piłki z brickami
     if (map->isColliding(*ball)) {
         ball->bounceY();
     }
+    // kolizje paletki z perkami
+    if (map->isColliding(*paddle)) {
+        std::cout << "width:" << paddle->width << " defaultWidth:" << paddle->defaultWidth << "\n";
+        currentPerkTime = maxPerkTime;
+    }
+    currentTime = getTickCount();
+    if (currentTime > lastTime + 1000) {
+        currentPerkTime--;
+        if (currentPerkTime == 0) {
+            paddle->resetPerk();
+        }
+        lastTime = currentTime;
+    }
+
+
 }
 
 void GameplayGameState::changeState(const std::string &name) {
@@ -134,8 +156,6 @@ void GameplayGameState::handleMouseKey(FRMouseButton button, bool released) {
 }
 
 void GameplayGameState::resetState() {
-    int brickLines = 1;
-    int brickColumns = 2;
     map = std::make_unique<Map>(0, 0, map->width, map->height, brickLines, brickColumns);
     paddle->resetState();
     ball->resetState();
