@@ -32,7 +32,7 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     int w{}, h{};
     getScreenSize(w, h);
 
-    int brickLines = 1;
+    int brickLines = 2;
     int brickColumns = 2;
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
 
@@ -45,17 +45,22 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 
     ball = std::make_unique<Ball>(0, 0);
     ball->setDimensions(0, paddle->height / 2);
-    ball->setPosition(paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2, paddle->yPos - ball->height);
+    ball->setPosition(paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2,
+                      paddle->yPos - ball->height);
 }
 
 void GameplayGameState::update(unsigned int i) {
     if (ball->lossCondition()) {
-        changeState("StartGameState");
+        // this could be "loser" screen state
+        std::cout << "You lost!\n";
+        changeState("GameplayGameState");
         return;
     }
     if (ball->isColliding(*paddle)) {
         if (map->winCondition()) {
-            changeState("StartGameState");
+            // this could be next level state of something
+            std::cout << "You won!\n";
+            changeState("GameplayGameState");
             return;
         }
         ball->bounceY();
@@ -80,14 +85,10 @@ void GameplayGameState::update(unsigned int i) {
         if (!ball->released) {
             ball->xPos = paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2;
         }
-    }
-    else if (ball->xPos < 0)
-    {
+    } else if (ball->xPos < 0) {
         ball->xPos = 0;
         ball->bounceX();
-    }
-    else if (ball->xPos > map->width - ball->width)
-    {
+    } else if (ball->xPos > map->width - ball->width) {
         ball->xPos = map->width - ball->width;
         ball->bounceX();
     }
