@@ -100,13 +100,11 @@ void GameplayGameState::update(unsigned int i) {
         ball->bounceY();
     }
 
-    // kolizje piłki z brickami
     if (map->isColliding(*ball)) {
         ball->bounceY();
     }
-    // kolizje paletki z perkami
+
     if (map->isColliding(*paddle)) {
-        std::cout << "width:" << paddle->width << " defaultWidth:" << paddle->defaultWidth << "\n";
         currentPerkTime = maxPerkTime;
     }
     currentTime = getTickCount();
