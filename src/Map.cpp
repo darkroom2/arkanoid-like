@@ -47,7 +47,6 @@ void Map::update(unsigned int i) {
     }
     for (auto &p: perks) {
         if (p->yPos > height) {
-            std::cout << "perk umiera za mapom\n";
             p->takeDamage();
             continue;
         }
