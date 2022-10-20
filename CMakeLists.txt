@@ -14,4 +14,7 @@ endforeach (LIBRARY)
 
 # Could just use target_link_libraries(${PROJECT_NAME} ${LIBRARIES}), but
 # I write library name by-hand to aviod making too much changes in Framework's CMakeFile.txt
-target_link_libraries(${PROJECT_NAME} PRIVATE FrameworkRelease PUBLIC cxxopts)
+target_link_libraries(arkanoid-like PRIVATE FrameworkRelease PUBLIC cxxopts)
+
+add_custom_target(copy_assets COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data)
+add_dependencies(arkanoid-like copy_assets)

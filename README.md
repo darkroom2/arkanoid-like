@@ -23,7 +23,7 @@ cmake --build build --target arkanoid-like
 ### Run
 
 ```shell
-./build/arkanoid-like
+./build/arkanoid-like --window 1024,1024
 ```
 
 ## TODO
