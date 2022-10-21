@@ -6,46 +6,46 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Rules
 
-* **It is required to use our framework. We do not accept solutions created using other libraries (like SFML, SDL2 etc).
+* It is required to use our framework. We do not accept solutions created using other libraries (like SFML, SDL2 etc).
   Functionality provided by Framework should be enough to do all required drawing. You can load TGA, JPG and PNG images
-  as sprites with it.**
-* **We have included all necessary assets in the folder “Data”. You can use these or any other assets which you want.**
-* **Window size should be possible to set from the command-line, e.g.: game -window 800x600**
+  as sprites with it.
+* We have included all necessary assets in the folder “Data”. You can use these or any other assets which you want.
+* Window size should be possible to set from the command-line, e.g.: game -window 800x600
 
 ### Overview
 
-* **The player controls a platform which can move left and right. The goal is to destroy all blocks by deflecting the ball
-  with the platform.**
+* The player controls a platform which can move left and right. The goal is to destroy all blocks by deflecting the ball
+  with the platform.
 
 > **_Note:_** it is not required to make level switching for this task (one game level is enough). However, you can make
 > more levels if you want.
 
 ### Player
 
-* **The player can move a platform using left and right arrow keyboard buttons. Initially the player can choose the angle
-  of the ball by pressing the left mouse button (the ball should be launched in the direction of the mouse cursor).**
+* The player can move a platform using left and right arrow keyboard buttons. Initially the player can choose the angle
+  of the ball by pressing the left mouse button (the ball should be launched in the direction of the mouse cursor).
 
 ### Ball
 
-* **The ball moves linearly with a constant speed. It reflects from edges, blocks and the player's platform.**
+* The ball moves linearly with a constant speed. It reflects from edges, blocks and the player's platform.
 
 ### Environment
 
-* **The level consists of blocks, which could be destroyed by a single hit. The ball should reflect from blocks after
-  their destruction.**
+* The level consists of blocks, which could be destroyed by a single hit. The ball should reflect from blocks after
+  their destruction.
 
 ### Win/loss conditions
 
-* **The player loses when the ball is not caught by the platform. Victory can be achieved by destroying all blocks and
-  catching the ball with the platform after.**
-* **The game should be restarted after victory/loss.**
+* The player loses when the ball is not caught by the platform. Victory can be achieved by destroying all blocks and
+  catching the ball with the platform after.
+* The game should be restarted after victory/loss.
 
 ### Features
 
 * There is an enemy turret, which randomly moves and shoots a player. Bullets spawned by a turret should pass through
   blocks and not destroy them. Game ends if the player is hit by a bullet.
-* **There are Red blocks, which could be destroyed only when all other blocks have been destroyed. You can use any color
-  which you want.**
+* There are Red blocks, which could be destroyed only when all other blocks have been destroyed. You can use any color
+  which you want.
 * The first ability (positive) increases the size of the platform and the second one (negative) decreases it by 40%.
   Ability stays active for 20 seconds. Abilities are “stackable”, it means that it is possible to have multiple active
   instances of the same ability. Minimum size is 50%, maximum is 200% of a default size.
@@ -55,13 +55,8 @@ Reference (Arkanoid, 1986): https://www.youtube.com/watch?v=CS5y9CEUl2g
 
 ### Restrictions
 
-* **You should not do any changes in launch.cpp/Framework.h as part of a test task.**
-* **There is a sample project "Project", you can modify it or create your own.**
-
-### Found Bugs
-
-* cmake not linking sdl2 library
-* png files include broken iCCP header
+* You should not do any changes in launch.cpp/Framework.h as part of a test task.
+* There is a sample project "Project", you can modify it or create your own.
 
 # PL
 
