@@ -11,7 +11,7 @@ Game::Game() : currentState(nullptr) {
     setCurrentState("StartGameState");
 }
 
-void Game::update(unsigned int i) {
+void Game::update(unsigned int i) const {
     currentState->update(i);
 }
 

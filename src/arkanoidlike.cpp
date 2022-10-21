@@ -11,10 +11,6 @@ public:
     explicit ArkanoidLike(int windowWidth = 600, int windowHeight = 800, bool windowFullscreen = false) : windowWidth(
             windowWidth), windowHeight(windowHeight), windowFullscreen(windowFullscreen) {}
 
-    static const char *GetDescription() {
-        return "This is a game where you have to overcome the wall using a ball to reach victory!";
-    }
-
     const std::string &getExecPath() const {
         return execPath;
     }
@@ -27,6 +23,14 @@ public:
         windowWidth = width;
         windowHeight = height;
         windowFullscreen = fullscreen;
+    }
+
+    static const char *GetDescription() {
+        return "This is a game where you have to overcome the wall using a ball to reach victory!";
+    }
+
+    const char *GetTitle() override {
+        return "Arkanoid Like";
     }
 
 private:
@@ -73,10 +77,6 @@ private:
 
     void onKeyReleased(FRKey k) override {
         game->currentState->onKeyPressed(k, false);
-    }
-
-    const char *GetTitle() override {
-        return "Arkanoid Like";
     }
 };
 

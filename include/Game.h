@@ -17,19 +17,18 @@ class Game {
 public:
     Game();
 
-    void update(unsigned int i);
-
     virtual ~Game();
-
-    GameState *currentState;
-
-    std::map<std::string, std::unique_ptr<GameState>> states;
 
     void setCurrentState(const std::string &name);
 
-private:
-    void addState(const std::string &name, std::unique_ptr<GameState> state);
+    void update(unsigned int i) const;
 
+    GameState *currentState;
+
+private:
+    std::map<std::string, std::unique_ptr<GameState>> states;
+
+    void addState(const std::string &name, std::unique_ptr<GameState> state);
 };
 
 
