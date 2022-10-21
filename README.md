@@ -51,6 +51,17 @@ To run the executable:
 
 ## TODO
 
+* There is an enemy turret, which randomly moves and shoots a player. Bullets spawned by a turret should pass through
+  blocks and not destroy them. Game ends if the player is hit by a bullet.
+* The first ability (positive) increases the size of the platform and the second one (negative) decreases it by 40%.
+  Ability stays active for 20 seconds. Abilities are “stackable”, it means that it is possible to have multiple active
+  instances of the same ability. Minimum size is 50%, maximum is 200% of a default size.
+* make perks collision with blocks
+* fix perks and sprites resizing
+* ball reflects from block horizontal and vertical edges
+* ball reflects from paddle depending on hitbox
+* make level switching
+* own command-line parameters parser
 * Game as shared_ptr<Game>
 * magic numbers to namespace globals
 * implement onCollision (think how to check against other entities... how to access them)
