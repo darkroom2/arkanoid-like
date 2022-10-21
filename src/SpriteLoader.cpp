@@ -28,16 +28,14 @@ void SpriteLoader::init(const std::string &execPath) {
     };
 }
 
-Sprite *SpriteLoader::getSprite(const std::string &name, EntityState state) {
-    auto stateStr = typeMapping.at(state);
-    std::string filename = _prepareFilename(std::vector<std::string>{name, stateStr});
-    return sprites.at(filename);
-}
-
 Sprite *SpriteLoader::getSprite(const std::string &name, EntityState state, EntityColor color) {
-    auto stateStr = typeMapping.at(state);
-    auto colorStr = colorMapping.at(color);
-    std::string filename = _prepareFilename(std::vector<std::string>{name, colorStr, stateStr});
+    std::vector<std::string> nameParts;
+    nameParts.push_back(name);
+    nameParts.push_back(typeMapping.at(state));
+    if (color != EntityColor::UNDEFINED) {
+        nameParts.push_back(colorMapping.at(color));
+    }
+    std::string filename = _prepareFilename(nameParts);
     return sprites.at(filename);
 }
 

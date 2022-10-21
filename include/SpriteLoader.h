@@ -23,9 +23,7 @@ class SpriteLoader {
 
 public:
 
-    static Sprite *getSprite(const std::string &name, EntityState state);
-
-    static Sprite *getSprite(const std::string &name, EntityState state, EntityColor color);
+    static Sprite *getSprite(const std::string &name, EntityState state, EntityColor color = EntityColor::UNDEFINED);
 
     static void init(const std::string &execPath);
 
