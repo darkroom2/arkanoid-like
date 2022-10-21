@@ -21,11 +21,11 @@ public:
 
     virtual void update(unsigned int i) = 0;
 
-    virtual void handleKey(FRKey key, bool pressed) = 0;
+    virtual void onKeyPressed(FRKey k, bool pressed) = 0;
 
-    virtual void handleMouseMove(int x, int y, int xrel, int yrel) = 0;
+    virtual void onMouseMove(int x, int y, int xRelative, int yRelative) = 0;
 
-    virtual void handleMouseKey(FRMouseButton button, bool released) = 0;
+    virtual void onMouseButtonClick(FRMouseButton button, bool isReleased) = 0;
 };
 
 class StartGameState : public GameState {
@@ -34,11 +34,11 @@ public:
 
     void update(unsigned int i) override;
 
-    void handleKey(FRKey key, bool pressed) override;
+    void onKeyPressed(FRKey key, bool pressed) override;
 
-    void handleMouseMove(int x, int y, int xrel, int yrel) override;
+    void onMouseMove(int x, int y, int xRelative, int yRelative) override;
 
-    void handleMouseKey(FRMouseButton button, bool released) override;
+    void onMouseButtonClick(FRMouseButton button, bool isReleased) override;
 };
 
 class GameplayGameState : public GameState {
@@ -60,11 +60,11 @@ public:
 
     void update(unsigned int i) override;
 
-    void handleKey(FRKey key, bool pressed) override;
+    void onKeyPressed(FRKey key, bool pressed) override;
 
-    void handleMouseMove(int x, int y, int xrel, int yrel) override;
+    void onMouseMove(int x, int y, int xrelative, int yrelative) override;
 
-    void handleMouseKey(FRMouseButton button, bool released) override;
+    void onMouseButtonClick(FRMouseButton button, bool isReleased) override;
 
     void resetState();
 

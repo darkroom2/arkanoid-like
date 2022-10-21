@@ -17,12 +17,12 @@ StartGameState::StartGameState(Game *game) : GameState(game) {}
 
 void StartGameState::update(unsigned int i) {}
 
-void StartGameState::handleMouseMove(int x, int y, int xrel, int yrel) {}
+void StartGameState::onMouseMove(int x, int y, int xRelative, int yRelative) {}
 
-void StartGameState::handleKey(FRKey key, bool pressed) {}
+void StartGameState::onKeyPressed(FRKey key, bool pressed) {}
 
-void StartGameState::handleMouseKey(FRMouseButton button, bool released) {
-    if (button == FRMouseButton::LEFT && released) {
+void StartGameState::onMouseButtonClick(FRMouseButton button, bool isReleased) {
+    if (button == FRMouseButton::LEFT && isReleased) {
         game->setCurrentState("GameplayGameState");
     }
 }
@@ -56,14 +56,14 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 void GameplayGameState::update(unsigned int i) {
     if (ball->lossCondition()) {
         // this could be "loser" screen state
-        std::cout << "You lost!\n";
+        std::cout << "You lost!" << std::endl;
         changeState("GameplayGameState");
         return;
     }
     if (ball->isColliding(*paddle)) {
         if (map->winCondition()) {
             // this could be next level state of something
-            std::cout << "You won!\n";
+            std::cout << "You won!" << std::endl;
             changeState("GameplayGameState");
             return;
         }
@@ -124,7 +124,7 @@ void GameplayGameState::changeState(const std::string &name) {
     game->setCurrentState(name);
 }
 
-void GameplayGameState::handleKey(FRKey key, bool pressed) {
+void GameplayGameState::onKeyPressed(FRKey key, bool pressed) {
     if (key == FRKey::LEFT) {
         paddle->setVelocity(pressed ? -paddle->speed : 0, 0);
         if (!ball->released) {
@@ -138,16 +138,16 @@ void GameplayGameState::handleKey(FRKey key, bool pressed) {
     }
 }
 
-void GameplayGameState::handleMouseMove(int x, int y, int xrel, int yrel) {
+void GameplayGameState::onMouseMove(int x, int y, int xrelative, int yrelative) {
     ball->setDirection(x, y);
 }
 
-void GameplayGameState::handleMouseKey(FRMouseButton button, bool released) {
-    if (button == FRMouseButton::LEFT && released) {
+void GameplayGameState::onMouseButtonClick(FRMouseButton button, bool isReleased) {
+    if (button == FRMouseButton::LEFT && isReleased) {
         if (!ball->released)
             ball->release();
     }
-    if (button == FRMouseButton::RIGHT && released) {
+    if (button == FRMouseButton::RIGHT && isReleased) {
         ball->resetState();
         paddle->resetState();
     }

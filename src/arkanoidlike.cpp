@@ -7,23 +7,35 @@
 
 /* Test Framework realization */
 class ArkanoidLike : public Framework {
+public:
+    explicit ArkanoidLike(int windowWidth = 600, int windowHeight = 800, bool windowFullscreen = false) : windowWidth(
+            windowWidth), windowHeight(windowHeight), windowFullscreen(windowFullscreen) {}
+
+    static const char *GetDescription() {
+        return "This is a game where you have to overcome the wall using a ball to reach victory!";
+    }
+
+    const std::string &getExecPath() const {
+        return execPath;
+    }
+
+    void setExecPath(const std::string &path) {
+        execPath = path;
+    }
+
+    void SetWindowSettings(int width, int height, bool fullscreen) {
+        windowWidth = width;
+        windowHeight = height;
+        windowFullscreen = fullscreen;
+    }
+
 private:
     int windowWidth;
     int windowHeight;
     bool windowFullscreen;
 
-public:
-    explicit ArkanoidLike(
-            uint16_t windowWidth = 600,
-            uint16_t windowHeight = 800,
-            bool windowFullscreen = false
-    ) : windowWidth(windowWidth),
-        windowHeight(windowHeight),
-        windowFullscreen(windowFullscreen) {
-    }
-
     std::string execPath;
-    std::unique_ptr<Game> game;
+    std::shared_ptr<Game> game;
 
     void PreInit(int &width, int &height, bool &fullscreen) override {
         width = windowWidth;
@@ -32,8 +44,8 @@ public:
     }
 
     bool Init() override {
-        SpriteLoader::init(execPath);
-        game = std::make_unique<Game>();
+        SpriteLoader::init(getExecPath());
+        game = std::make_shared<Game>();
         return true;
     }
 
@@ -47,45 +59,35 @@ public:
         return false;
     }
 
-    void onMouseMove(int x, int y, int xrelative, int yrelative) override {
-        game->currentState->handleMouseMove(x, y, xrelative, yrelative);
+    void onMouseMove(int x, int y, int xRelative, int yRelative) override {
+        game->currentState->onMouseMove(x, y, xRelative, yRelative);
     }
 
     void onMouseButtonClick(FRMouseButton button, bool isReleased) override {
-        game->currentState->handleMouseKey(button, isReleased);
+        game->currentState->onMouseButtonClick(button, isReleased);
     }
 
     void onKeyPressed(FRKey k) override {
-        game->currentState->handleKey(k, true);
+        game->currentState->onKeyPressed(k, true);
     }
 
     void onKeyReleased(FRKey k) override {
-        game->currentState->handleKey(k, false);
+        game->currentState->onKeyPressed(k, false);
     }
 
     const char *GetTitle() override {
-        return "Arcanoid Like";
-    }
-
-    virtual const char *GetDescription() {
-        return "This is a game where you have to overcome the wall using a ball to reach victory!";
-    }
-
-    virtual void SetWindowSettings(int w, int h, bool fullscreen) {
-        windowWidth = w;
-        windowHeight = h;
-        windowFullscreen = fullscreen;
+        return "Arkanoid Like";
     }
 };
 
 
 int main(int argc, const char *argv[]) {
-    auto arkanoidlike = std::make_unique<ArkanoidLike>();
+    auto arkanoidLike = std::make_unique<ArkanoidLike>();
     try {
-        std::unique_ptr<cxxopts::Options> allocated(new cxxopts::Options(argv[0], arkanoidlike->GetDescription()));
+        std::unique_ptr<cxxopts::Options> allocated(new cxxopts::Options(argv[0], arkanoidLike->GetDescription()));
         auto &options = *allocated;
 
-        arkanoidlike->execPath = options.program();
+        arkanoidLike->setExecPath(options.program());
 
         options.add_options()
                 ("h,help", "Print help")
@@ -101,17 +103,17 @@ int main(int argc, const char *argv[]) {
         if (result.count("window")) {
             const auto values = result["window"].as<std::vector<int>>();
             if (values.size() != 2) {
-                std::cout << "provide two arguments [w,h] eg. 800,600" << std::endl;
+                std::cout << "Provide two arguments [w,h] eg. 800,600" << std::endl;
                 return -1;
             }
-            arkanoidlike->SetWindowSettings(values[0], values[1], false);
+            arkanoidLike->SetWindowSettings(values[0], values[1], false);
         } else {
-            arkanoidlike->SetWindowSettings(0, 0, true);
+            arkanoidLike->SetWindowSettings(0, 0, true);
         }
     }
     catch (const cxxopts::exceptions::exception &e) {
-        std::cout << "error parsing options: " << e.what() << std::endl;
+        std::cout << "Error parsing options: " << e.what() << std::endl;
         return -1;
     }
-    return run(arkanoidlike.get());
+    return run(arkanoidLike.get());
 }
