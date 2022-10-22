@@ -104,10 +104,10 @@ void Map::trySpawnPerk(double x, double y, int size) {
     }
 }
 
-bool Map::isColliding(Paddle &entity) {
+bool Map::isColliding(Paddle &paddle) {
     for (const auto &perk: perks) {
-        if (perk->isColliding(entity)) {
-            entity.setPerk(perk->currentState);
+        if (perk->isColliding(paddle)) {
+//            paddle.setPerk(perk->currentState);
             perk->takeDamage();
             return true;
         }

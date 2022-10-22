@@ -9,9 +9,7 @@
 
 
 Entity::Entity(double x, double y) : xPos(x), yPos(y), defaultX(0), defaultY(0), xVel(0), yVel(0), width(0), height(0),
-                                     currentState(EntityState::UNDEFINED), alive(true) {}
-
-Entity::~Entity() = default;
+                                     currentState(EntityState::UNDEFINED), alive(true), speed(0) {}
 
 bool Entity::isColliding(const Entity &entity) const {
     return xPos > entity.xPos && xPos < entity.xPos + entity.width && yPos > entity.yPos &&
@@ -22,7 +20,7 @@ void Entity::setDimensions(double w, double h) {
     if (width == 0 || height == 0 || (w < 0 && h < 0))
         return;
 
-    double ratio = (double) height / (double) width;
+    double ratio = height / width;
 
     if (w > 0)
         width = w;
@@ -53,8 +51,9 @@ void Entity::setVelocity(double vx, double vy) {
 }
 
 void Entity::update(unsigned int i) {
-    if (spritesByType.contains(currentState))
+    if (spritesByType.contains(currentState)) {
         drawSprite(spritesByType.at(currentState), (int) xPos, (int) yPos);
+    }
     xPos += xVel;
     yPos += yVel;
 }
@@ -74,16 +73,29 @@ void Entity::resetState() {
     resetPos();
 }
 
+void Entity::loadSprites(const std::string &name, std::vector<EntityState> &states, const EntityState &default_state,
+                         const EntityColor &color) {
+    for (const auto &state: states) {
+        spritesByType.emplace(state, SpriteLoader::getSprite(name, state, color));
+    }
+    currentState = default_state;
+    int w, h;
+    getSpriteSize(spritesByType.at(currentState), w, h);
+    width = w;
+    height = h;
+}
+
+void Entity::setSpeed(double value) {
+    speed = value;
+}
+
 Entity::Entity(const Entity &e) = default;
 
 
-Ball::Ball(double x, double y) : Entity(x, y), dirX(0), dirY(0), speed(0.5), released(false) {
-    std::vector<EntityState> v{EntityState::NORMAL};
-    for (const auto &state: v) {
-        spritesByType.emplace(state, SpriteLoader::getSprite("ball", state));
-    }
-    currentState = EntityState::NORMAL;
-    getSpriteSize(spritesByType.at(currentState), (int &) width, (int &) height);
+Ball::Ball(double x, double y, double speed) : Entity(x, y), dirX(0), dirY(0), released(false) {
+    std::vector<EntityState> states{EntityState::NORMAL};
+    loadSprites("ball", states, EntityState::NORMAL);
+    Entity::speed = width * speed;
 }
 
 void Ball::setDirection(int mouseX, int mouseY) {
@@ -116,100 +128,34 @@ void Ball::resetState() {
     released = false;
 }
 
+bool Ball::isReleased() const {
+    return released;
+}
+
 Ball::Ball(const Ball &b) = default;
 
 
-Paddle::Paddle(double x, double y) : Entity(x, y), speed(0.5) {
-    currentPerk = EntityState::UNDEFINED;
-    std::vector<EntityState> v{EntityState::NORMAL};
-    for (const auto &state: v) {
-        spritesByType.emplace(state, SpriteLoader::getSprite("paddle", state));
-    }
-    currentState = EntityState::NORMAL;
-    getSpriteSize(spritesByType.at(currentState), (int &) width, (int &) height);
-}
-
-void Paddle::setDimensions(double w, double h) {
-    Entity::setDimensions(w, h);
-
-    defaultWidth = width;
-    maxWidth = width * 2;
-    minWidth = width * 0.5;
-}
-
-void Paddle::resetDimension() {
-    setDimensions(defaultWidth, 0);
-};
-
-void Paddle::resetState() {
-    Entity::resetState();
-    resetDimension();
-}
-
-void Paddle::setWidth(int _width) {
-    if (_width >= maxWidth) {
-        width = maxWidth;
-    } else if (_width <= minWidth) {
-        width = minWidth;
-    } else {
-        width = _width;
-    }
-}
-
-void Paddle::setDefaultWidth(int _width) {
-    defaultWidth = _width;
-}
-
-
-void Paddle::increase() {
-    setWidth(width * 1.4);
-    Entity::setDimensions(width, 0);
-}
-
-void Paddle::decrease() {
-    setWidth(width * 0.6);
-    Entity::setDimensions(width, height);
-}
-
-void Paddle::resetPerk() {
-    currentPerk = EntityState::UNDEFINED;
-    resetDimension();
+Paddle::Paddle(double x, double y, double speed) : Entity(x, y), currentPerk(EntityState::UNDEFINED) {
+    std::vector<EntityState> states{EntityState::NORMAL};
+    loadSprites("paddle", states, EntityState::NORMAL);
 }
 
 void Paddle::setPerk(EntityState perk) {
-    if (currentPerk == EntityState::UNDEFINED) {
-        currentPerk = perk;
-        if (perk == EntityState::POSITIVE) {
-            increase();
-        } else if (perk == EntityState::NEGATIVE) {
-            decrease();
-        }
-    } else if (currentPerk == EntityState::POSITIVE && perk == EntityState::POSITIVE) {
-        increase();
-    } else if (currentPerk == EntityState::NEGATIVE && perk == EntityState::NEGATIVE) {
-        decrease();
-    } else if (currentPerk == EntityState::POSITIVE && perk == EntityState::NEGATIVE ||
-               currentPerk == EntityState::NEGATIVE && perk == EntityState::POSITIVE) {
-        resetPerk();
-    }
+    currentPerk = perk;
 }
 
 Paddle::Paddle(const Paddle &p) = default;
 
 
 Brick::Brick(double x, double y, EntityColor color) : Entity(x, y), color(color) {
-    std::vector<EntityState> v{EntityState::NORMAL, EntityState::DAMAGED};
-    for (const auto &state: v) {
-        spritesByType.emplace(state, SpriteLoader::getSprite("brick", state, color));
-    }
-    currentState = EntityState::DAMAGED;
-    getSpriteSize(spritesByType.at(currentState), (int &) width, (int &) height);
+    std::vector<EntityState> states{EntityState::NORMAL, EntityState::DAMAGED};
+    loadSprites("brick", states, EntityState::DAMAGED, color);
 }
 
 void Brick::takeDamage() {
     // for bricks to be one-hit killable I set the state to be DAMAGED in Brick constructor
     if (currentState == EntityState::DAMAGED) {
-        alive = false;
+        Entity::takeDamage();
     } else {
         currentState = EntityState::DAMAGED;
     }
@@ -219,12 +165,8 @@ Brick::Brick(const Brick &b) = default;
 
 
 Perk::Perk(double x, double y, EntityState type) : Entity(x, y) {
-    std::vector<EntityState> v{EntityState::POSITIVE, EntityState::NEGATIVE};
-    for (const auto &state: v) {
-        spritesByType.emplace(state, SpriteLoader::getSprite("perk", state));
-    }
-    currentState = type;
-    getSpriteSize(spritesByType.at(currentState), (int &) width, (int &) height);
+    std::vector<EntityState> types{EntityState::POSITIVE, EntityState::NEGATIVE};
+    loadSprites("perk", types, type);
 }
 
 Perk::Perk(const Perk &p) = default;

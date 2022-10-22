@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <map>
+#include <vector>
 
 
 class Sprite;
@@ -21,32 +22,27 @@ enum class EntityState {
 
 enum class EntityColor {
     GREEN,
-    RED
+    RED,
+    UNDEFINED
 };
 
 class Entity {
 public:
-    double xPos;
-    double yPos;
-    double xVel;
-    double yVel;
-    double defaultX;
-    double defaultY;
-    double width;
-    double height;
-
-    bool alive;
-
-    EntityState currentState;
-    std::map<EntityState, Sprite *> spritesByType;
-
     explicit Entity(double x, double y);
 
     Entity(const Entity &e);
 
-    virtual ~Entity();
+    double height;
+    double width;
+    double xPos;
+    double yPos;
+
+    EntityState currentState;
+    bool alive;
 
     virtual void update(unsigned int i);
+
+    virtual void takeDamage();
 
     virtual bool isColliding(const Entity &entity) const;
 
@@ -54,37 +50,56 @@ public:
 
     virtual void setPosition(double x, double y);
 
-    virtual void setVelocity(double vx, double vy);
+    void loadSprites(const std::string &name, std::vector<EntityState> &states, const EntityState &default_state,
+                     const EntityColor &color = EntityColor::UNDEFINED);
+
+    double speed;
+
+    void setSpeed(double speed);
+
+    virtual void resetState();
+
+private:
+    double defaultX;
+    double defaultY;
 
     virtual void resetPos();
 
-    virtual void takeDamage();
+    virtual void setVelocity(double vx, double vy);
 
-    virtual void resetState();
+protected:
+    std::map<EntityState, Sprite *> spritesByType;
+
+    double xVel;
+    double yVel;
+
 };
 
 class Ball : public Entity {
 public:
-    explicit Ball(double x, double y);
+    explicit Ball(double x, double y, double speed = 0.005f);
 
     Ball(const Ball &b);
 
-    void setDirection(int mouseX, int mouseY);
-
-    double dirX;
-    double dirY;
-    double speed;
-    bool released;
-
-    void release();
-
-    void bounceX();
+    bool lossCondition() const;
 
     void bounceY();
 
-    bool lossCondition() const;
+    void bounceX();
+
+    void setDirection(int mouseX, int mouseY);
+
+    void release();
 
     void resetState() override;
+
+private:
+    int dirX;
+    int dirY;
+    bool released;
+
+public:
+    bool isReleased() const;
 };
 
 class Perk : public Entity {
@@ -92,41 +107,20 @@ public:
     explicit Perk(double x, double y, EntityState type);
 
     Perk(const Perk &p);
-
-    EntityState getPerkType();
 };
 
 class Paddle : public Entity {
 public:
-    double speed;
-    int maxWidth;
-    int minWidth;
-    int defaultWidth;
-    EntityState currentPerk;
-
-    explicit Paddle(double x, double y);
+    explicit Paddle(double x, double y, double speed = 0.001f);
 
     Paddle(const Paddle &p);
 
-    void setDimensions(double w, double h);
-
-    void setDefaultWidth(int _width);
-
-    void setWidth(int _width);
-
-    void resetPerk();
-
-    void resetDimension();
-
-    void resetState();
-
-    void increase();
-
-    void decrease();
-
     void setPerk(EntityState perk);
 
+    void moveLeft();
 
+private:
+    EntityState currentPerk;
 };
 
 class Brick : public Entity {
