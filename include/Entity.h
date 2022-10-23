@@ -69,10 +69,24 @@ private:
 
 protected:
     std::map<EntityState, Sprite *> spritesByType;
-
     double xVel;
     double yVel;
+};
 
+class Paddle : public Entity {
+public:
+    explicit Paddle(double x, double y, double speed = 0.005f);
+
+    Paddle(const Paddle &p);
+
+    void setPerk(EntityState perk);
+
+    void moveLeft(bool pressed);
+
+    void moveRight(bool pressed);
+
+private:
+    EntityState currentPerk;
 };
 
 class Ball : public Entity {
@@ -107,20 +121,6 @@ public:
     explicit Perk(double x, double y, EntityState type);
 
     Perk(const Perk &p);
-};
-
-class Paddle : public Entity {
-public:
-    explicit Paddle(double x, double y, double speed = 0.001f);
-
-    Paddle(const Paddle &p);
-
-    void setPerk(EntityState perk);
-
-    void moveLeft();
-
-private:
-    EntityState currentPerk;
 };
 
 class Brick : public Entity {

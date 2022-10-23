@@ -68,9 +68,9 @@ void Entity::takeDamage() {
 }
 
 void Entity::resetState() {
+    resetPos();
     currentState = EntityState::NORMAL;
     alive = true;
-    resetPos();
 }
 
 void Entity::loadSprites(const std::string &name, std::vector<EntityState> &states, const EntityState &default_state,
@@ -112,11 +112,11 @@ void Ball::release() {
 }
 
 void Ball::bounceX() {
-    xVel = -1 * xVel;
+    xVel = -xVel;
 }
 
 void Ball::bounceY() {
-    yVel = -1 * yVel;
+    yVel = -yVel;
 }
 
 bool Ball::lossCondition() const {

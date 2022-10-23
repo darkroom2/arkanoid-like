@@ -51,7 +51,7 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     double paddleWidth = std::round(w / paddleProportion);
     paddle = std::make_unique<Paddle>(0, 0);
     paddle->setDimensions(paddleWidth, 0);
-    paddle->setPosition(w / 2 - paddle->width / 2, h - paddle->height - borderPadding);
+    paddle->setPosition((double) w / 2 - paddle->width / 2, h - paddle->height - borderPadding);
 
     ball = std::make_unique<Ball>(0, 0);
     ball->setDimensions(0, paddle->height / 2);
