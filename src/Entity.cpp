@@ -85,8 +85,12 @@ void Entity::loadSprites(const std::string &name, std::vector<EntityState> &stat
     height = h;
 }
 
-void Entity::setSpeed(double value) {
-    speed = value;
+double Entity::getXVel() const {
+    return xVel;
+}
+
+double Entity::getYVel() const {
+    return yVel;
 }
 
 Entity::Entity(const Entity &e) = default;
@@ -132,16 +136,35 @@ bool Ball::isReleased() const {
     return released;
 }
 
+void Ball::moveWithPaddle(bool pressed) {
+    if (!isReleased()) {
+        if (pressed) {
+            setVelocity(paddle->getXVel(), paddle->getYVel());
+        } else {
+            setVelocity(0, 0);
+        }
+    }
+}
+
+void Ball::stickTo(Paddle *p) {
+    paddle = p;
+}
+
 Ball::Ball(const Ball &b) = default;
 
 
 Paddle::Paddle(double x, double y, double speed) : Entity(x, y), currentPerk(EntityState::UNDEFINED) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("paddle", states, EntityState::NORMAL);
+    Entity::speed = width * speed;
 }
 
-void Paddle::setPerk(EntityState perk) {
-    currentPerk = perk;
+void Paddle::moveLeft(bool pressed) {
+    setVelocity(pressed ? -speed : 0, 0);
+}
+
+void Paddle::moveRight(bool pressed) {
+    setVelocity(pressed ? speed: 0, 0);
 }
 
 Paddle::Paddle(const Paddle &p) = default;

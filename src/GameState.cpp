@@ -46,7 +46,7 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
 
-    int borderPadding = 5;
+    int borderPadding = h / 12;
     int paddleProportion = 5.f;
     double paddleWidth = std::round(w / paddleProportion);
     paddle = std::make_unique<Paddle>(0, 0);
@@ -54,6 +54,7 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     paddle->setPosition((double) w / 2 - paddle->width / 2, h - paddle->height - borderPadding);
 
     ball = std::make_unique<Ball>(0, 0);
+    ball->stickTo(paddle.get());
     ball->setDimensions(0, paddle->height / 2);
     ball->setPosition(paddle->xPos + paddle->width / 2 - ball->width / 2, paddle->yPos - ball->height);
 }
@@ -129,14 +130,14 @@ void GameplayGameState::changeState(const std::string &name) {
 
 void GameplayGameState::onKeyPressed(FRKey key, bool pressed) {
     if (key == FRKey::LEFT) {
-        paddle->moveLeft();
+        paddle->moveLeft(pressed);
         if (!ball->isReleased()) {
-            ball->setVelocity(pressed ? -paddle->speed : 0, 0);
+            ball->moveWithPaddle(pressed);
         }
     } else if (key == FRKey::RIGHT) {
-        paddle->setVelocity(pressed ? paddle->speed : 0, 0);
+        paddle->moveRight(pressed);
         if (!ball->isReleased()) {
-            ball->setVelocity(pressed ? paddle->speed : 0, 0);
+            ball->moveWithPaddle(pressed);
         }
     }
 }

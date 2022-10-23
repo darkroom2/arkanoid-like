@@ -59,13 +59,17 @@ public:
 
     virtual void resetState();
 
+    virtual void setVelocity(double vx, double vy);
+
+    double getXVel() const;
+
+    double getYVel() const;
+
 private:
     double defaultX;
     double defaultY;
 
     virtual void resetPos();
-
-    virtual void setVelocity(double vx, double vy);
 
 protected:
     std::map<EntityState, Sprite *> spritesByType;
@@ -107,13 +111,17 @@ public:
 
     void resetState() override;
 
+    void moveWithPaddle(bool pressed);
+
+    void stickTo(Paddle *paddle);
+
+    bool isReleased() const;
+
 private:
     int dirX;
     int dirY;
     bool released;
-
-public:
-    bool isReleased() const;
+    const Paddle *paddle;
 };
 
 class Perk : public Entity {
