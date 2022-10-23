@@ -64,4 +64,3 @@ To run the executable:
 * own command-line parameters parser
 * Game as shared_ptr<Game>
 * magic numbers to namespace globals
-* implement onCollision (think how to check against other entities... how to access them)
