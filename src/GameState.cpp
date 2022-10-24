@@ -42,7 +42,7 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
     int w, h;
     getScreenSize(w, h);
 
-    brickLines = 3;
+    brickLines = 11;
     brickColumns = 5;
 
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
@@ -109,10 +109,10 @@ void GameplayGameState::update(unsigned int i) {
         ball->bounceY();
     }
 
-    if (map->isColliding(*paddle)) {
-//        currentPerkTime = maxPerkTime;
-    }
+    // TODO: logic happens inside map->isColliding but maybe wrap it in an if () and do smth.
+    map->isColliding(*paddle);
 
+    // TODO: move this commented logic inside paddle update() function
 //    if (i > lastTime + 1000) {
 //        currentPerkTime--;
 //        if (currentPerkTime == 0) {

@@ -180,7 +180,7 @@ void Ball::stickTo(Paddle *p) {
 Ball::Ball(const Ball &b) = default;
 
 
-Paddle::Paddle(double x, double y, double speed) : Entity(x, y), currentPerk(EntityState::UNDEFINED) {
+Paddle::Paddle(double x, double y, double speed) : Entity(x, y) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("paddle", states, EntityState::NORMAL);
     Entity::speed = speed;
@@ -202,7 +202,11 @@ void Paddle::extend() {
     setDimensions(width * 1.4f, height);
 }
 
-Paddle::Paddle(const Paddle &p) = default;
+void Paddle::addPerk(std::unique_ptr<Perk> perk) {
+    // TODO: set lifetime to perk and in paddle.update() remove lifetime and in takeDamage undo effect
+    //  (shrinked -> extend, extendended -> shrink)
+    perks.push_back(std::move(perk));
+}
 
 
 Brick::Brick(double x, double y, EntityColor color) : Entity(x, y), color(color) {

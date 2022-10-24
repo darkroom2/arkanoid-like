@@ -79,6 +79,13 @@ protected:
     double defaultHeight;
 };
 
+class Perk : public Entity {
+public:
+    explicit Perk(double x, double y, EntityState type, double speed = .0007f);
+
+    Perk(const Perk &p);
+};
+
 class Paddle : public Entity {
 public:
     explicit Paddle(double x, double y, double speed = .001f);
@@ -93,8 +100,10 @@ public:
 
     void extend();
 
+    void addPerk(std::unique_ptr<Perk> perk);
+
 private:
-    EntityState currentPerk;
+    std::vector<std::unique_ptr<Perk>> perks;
 };
 
 class Ball : public Entity {
@@ -126,13 +135,6 @@ private:
     int dirY;
     bool released;
     const Paddle *paddle;
-};
-
-class Perk : public Entity {
-public:
-    explicit Perk(double x, double y, EntityState type, double speed = .0007f);
-
-    Perk(const Perk &p);
 };
 
 class Brick : public Entity {

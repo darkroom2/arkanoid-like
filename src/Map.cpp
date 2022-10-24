@@ -4,7 +4,6 @@
 
 #include <cmath>
 #include <filesystem>
-#include <iostream>
 #include "../include/Map.h"
 
 
@@ -66,10 +65,10 @@ bool Map::winCondition() const {
 }
 
 bool Map::isColliding(Paddle &paddle) {
-    for (const auto &perk: perks) {
+    for (auto &perk: perks) {
         if (paddle.isColliding(*perk)) {
-            std::cout << "perk paddle colliding" << std::endl;
-            perk->takeDamage();
+            paddle.addPerk(std::move(perk));
+            // TODO: need to remove empty pointer here!
             return true;
         }
     }
