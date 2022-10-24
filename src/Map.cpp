@@ -41,7 +41,7 @@ Map::Map(int x, int y, int w, int h, int lines, int columns) : Entity(x, y), e1(
 }
 
 void Map::update(unsigned int i) {
-    removeBricks();
+    removeEntities();
     for (auto &b: bricks) {
         b->update(i);
     }
@@ -58,9 +58,20 @@ bool Map::winCondition() const {
     return bricks.empty();
 }
 
-bool Map::isColliding(const Entity &entity) {
+bool Map::isColliding(Paddle &paddle) {
+    for (const auto &perk: perks) {
+        if (paddle.isColliding(*perk)) {
+            std::cout << "perk paddle colliding" << std::endl;
+            perk->takeDamage();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Map::isColliding(Ball &ball) {
     for (const auto &brick: bricks) {
-        if (entity.isColliding(*brick)) {
+        if (ball.isColliding(*brick)) {
             if (brick->color == EntityColor::GREEN) {
                 brick->takeDamage();
                 --greenBricks;
@@ -69,6 +80,7 @@ bool Map::isColliding(const Entity &entity) {
                 return true;
             } else if (brick->color == EntityColor::RED && greenBricks == 0) {
                 brick->takeDamage();
+                --redBricks;
                 trySpawnPerk(brick->xPos + (double) brick->width / 2 - (double) brick->height / 2, brick->yPos,
                              brick->height);
                 return true;
@@ -80,13 +92,13 @@ bool Map::isColliding(const Entity &entity) {
     return false;
 }
 
-void Map::removeBricks() {
+void Map::removeEntities() {
     std::erase_if(bricks, [](auto &x) { return !x->alive; });
     std::erase_if(perks, [](auto &x) { return !x->alive; });
 }
 
-void Map::trySpawnPerk(double x, double y, int size) {
-    EntityState perkType;
+void Map::trySpawnPerk(double x, double y, double size) {
+    EntityState perkType = EntityState::UNDEFINED;
 
     int perkTicket = uniform_dist(e1);
 
@@ -99,18 +111,7 @@ void Map::trySpawnPerk(double x, double y, int size) {
         }
         auto perk = std::make_unique<Perk>(x, y, perkType);
         perk->setDimensions(size, 0);
-        perk->setVelocity(0, 0.5);
+        perk->setVelocity(0, width * perk->getSpeed());
         perks.push_back(std::move(perk));
     }
-}
-
-bool Map::isColliding(Paddle &paddle) {
-    for (const auto &perk: perks) {
-        if (perk->isColliding(paddle)) {
-//            paddle.setPerk(perk->currentState);
-            perk->takeDamage();
-            return true;
-        }
-    }
-    return false;
 }

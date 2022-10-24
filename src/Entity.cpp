@@ -93,13 +93,21 @@ double Entity::getYVel() const {
     return yVel;
 }
 
+void Entity::setSpeed(double s) {
+    speed = s;
+}
+
+double Entity::getSpeed() const {
+    return speed;
+}
+
 Entity::Entity(const Entity &e) = default;
 
 
-Ball::Ball(double x, double y, double speed) : Entity(x, y), dirX(0), dirY(0), released(false) {
+Ball::Ball(double x, double y, double speed) : Entity(x, y), dirX(0), dirY(0), released(false), paddle(nullptr) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("ball", states, EntityState::NORMAL);
-    Entity::speed = width * speed;
+    Entity::speed = speed;
 }
 
 void Ball::setDirection(int mouseX, int mouseY) {
@@ -156,7 +164,7 @@ Ball::Ball(const Ball &b) = default;
 Paddle::Paddle(double x, double y, double speed) : Entity(x, y), currentPerk(EntityState::UNDEFINED) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("paddle", states, EntityState::NORMAL);
-    Entity::speed = width * speed;
+    Entity::speed = speed;
 }
 
 void Paddle::moveLeft(bool pressed) {
@@ -164,7 +172,7 @@ void Paddle::moveLeft(bool pressed) {
 }
 
 void Paddle::moveRight(bool pressed) {
-    setVelocity(pressed ? speed: 0, 0);
+    setVelocity(pressed ? speed : 0, 0);
 }
 
 Paddle::Paddle(const Paddle &p) = default;
@@ -187,9 +195,10 @@ void Brick::takeDamage() {
 Brick::Brick(const Brick &b) = default;
 
 
-Perk::Perk(double x, double y, EntityState type) : Entity(x, y) {
+Perk::Perk(double x, double y, EntityState type, double speed) : Entity(x, y) {
     std::vector<EntityState> types{EntityState::POSITIVE, EntityState::NEGATIVE};
     loadSprites("perk", types, type);
+    Entity::speed = speed;
 }
 
 Perk::Perk(const Perk &p) = default;

@@ -22,11 +22,13 @@ public:
 
     void update(unsigned int i) override;
 
-    bool isColliding(const Entity &entity);
-
     bool isColliding(Paddle &paddle);
 
+    bool isColliding(Ball &ball);
+
     bool winCondition() const;
+
+    void trySpawnPerk(double x, double y, double size);
 
 private:
     std::random_device r;
@@ -36,9 +38,7 @@ private:
     std::vector<std::unique_ptr<Brick>> bricks;
     std::vector<std::unique_ptr<Perk>> perks;
 
-    void removeBricks();
-
-    void trySpawnPerk(double x, double y, int size);
+    void removeEntities();
 };
 
 

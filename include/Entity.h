@@ -36,7 +36,6 @@ public:
     double width;
     double xPos;
     double yPos;
-
     EntityState currentState;
     bool alive;
 
@@ -53,9 +52,9 @@ public:
     void loadSprites(const std::string &name, std::vector<EntityState> &states, const EntityState &default_state,
                      const EntityColor &color = EntityColor::UNDEFINED);
 
-    double speed;
-
     void setSpeed(double speed);
+
+    double getSpeed() const;
 
     virtual void resetState();
 
@@ -75,15 +74,14 @@ protected:
     std::map<EntityState, Sprite *> spritesByType;
     double xVel;
     double yVel;
+    double speed;
 };
 
 class Paddle : public Entity {
 public:
-    explicit Paddle(double x, double y, double speed = 0.005f);
+    explicit Paddle(double x, double y, double speed = .001f);
 
     Paddle(const Paddle &p);
-
-    void setPerk(EntityState perk);
 
     void moveLeft(bool pressed);
 
@@ -95,7 +93,7 @@ private:
 
 class Ball : public Entity {
 public:
-    explicit Ball(double x, double y, double speed = 0.005f);
+    explicit Ball(double x, double y, double speed = .0009f);
 
     Ball(const Ball &b);
 
@@ -126,7 +124,7 @@ private:
 
 class Perk : public Entity {
 public:
-    explicit Perk(double x, double y, EntityState type);
+    explicit Perk(double x, double y, EntityState type, double speed = .0007f);
 
     Perk(const Perk &p);
 };

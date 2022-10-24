@@ -19,7 +19,8 @@ StartGameState::StartGameState(Game *game) : GameState(game) {
     std::vector<EntityState> states{EntityState::NORMAL};
     welcomeScreen->loadSprites("start-screen", states, EntityState::NORMAL);
     welcomeScreen->setDimensions((double) w / 3, 0);
-    welcomeScreen->setPosition((double) w / 2 + welcomeScreen->width / 2, (double) h / 2);
+    welcomeScreen->setPosition((double) w / 2 - welcomeScreen->width / 2,
+                               (double) h / 2 - (double) welcomeScreen->height / 2);
 }
 
 void StartGameState::update(unsigned int i) {
@@ -46,17 +47,19 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 
     map = std::make_unique<Map>(0, 0, w, h, brickLines, brickColumns);
 
-    int borderPadding = h / 12;
+    int borderPadding = h / 20;
     int paddleProportion = 5.f;
     double paddleWidth = std::round(w / paddleProportion);
     paddle = std::make_unique<Paddle>(0, 0);
     paddle->setDimensions(paddleWidth, 0);
     paddle->setPosition((double) w / 2 - paddle->width / 2, h - paddle->height - borderPadding);
+    paddle->setSpeed(map->width * paddle->getSpeed());
 
     ball = std::make_unique<Ball>(0, 0);
-    ball->stickTo(paddle.get());
     ball->setDimensions(0, paddle->height / 2);
     ball->setPosition(paddle->xPos + paddle->width / 2 - ball->width / 2, paddle->yPos - ball->height);
+    ball->stickTo(paddle.get());
+    ball->setSpeed(map->width * ball->getSpeed());
 }
 
 void GameplayGameState::update(unsigned int i) {
@@ -139,6 +142,8 @@ void GameplayGameState::onKeyPressed(FRKey key, bool pressed) {
         if (!ball->isReleased()) {
             ball->moveWithPaddle(pressed);
         }
+    } else if (key == FRKey::UP && pressed) {
+        map->trySpawnPerk(100, 0, 50);
     }
 }
 
