@@ -12,8 +12,11 @@ Entity::Entity(double x, double y) : xPos(x), yPos(y), defaultX(0), defaultY(0),
                                      currentState(EntityState::UNDEFINED), alive(true), speed(0) {}
 
 bool Entity::isColliding(const Entity &entity) const {
-    return xPos > entity.xPos && xPos < entity.xPos + entity.width && yPos > entity.yPos &&
-           yPos < entity.yPos + entity.height;
+    auto c1 = xPos < entity.xPos + entity.width;
+    auto c2 = xPos + width > entity.xPos;
+    auto c3 = yPos < entity.yPos + entity.height;
+    auto c4 = height + yPos > entity.yPos;
+    return c1 && c2 && c3 && c4;
 }
 
 void Entity::setDimensions(double w, double h) {

@@ -68,8 +68,7 @@ void GameplayGameState::update(unsigned int i) {
         std::cout << "You lost!" << std::endl;
         changeState("StartGameState");
         return;
-    }
-    if (ball->isColliding(*paddle)) {
+    } else if (ball->isColliding(*paddle)) {
         if (map->winCondition()) {
             // this could be next level state of something
             std::cout << "You won!" << std::endl;
@@ -79,30 +78,31 @@ void GameplayGameState::update(unsigned int i) {
         ball->bounceY();
     }
 
-    if (ball->yPos > map->height) {
-        ball->takeDamage();
-    }
-
     if (paddle->xPos < 0) {
         paddle->xPos = 0;
         if (!ball->isReleased()) {
             ball->xPos = paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2;
         }
-    }
-    if (paddle->xPos > map->width - paddle->width) {
+    } else if (paddle->xPos > map->width - paddle->width) {
         paddle->xPos = map->width - paddle->width;
         if (!ball->isReleased()) {
             ball->xPos = paddle->xPos + (double) paddle->width / 2 - (double) ball->width / 2;
         }
-    } else if (ball->xPos < 0) {
+    }
+
+    if (ball->xPos < 0) {
         ball->xPos = 0;
         ball->bounceX();
     } else if (ball->xPos > map->width - ball->width) {
         ball->xPos = map->width - ball->width;
         ball->bounceX();
-    } else if (ball->yPos < 0) {
+    }
+
+    if (ball->yPos < 0) {
         ball->yPos = 0;
         ball->bounceY();
+    } else if (ball->yPos > map->height) {
+        ball->takeDamage();
     }
 
     if (map->isColliding(*ball)) {
