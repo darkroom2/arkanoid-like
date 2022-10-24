@@ -8,7 +8,8 @@
 #include "../libs/Framework/inc/Framework.h"
 
 
-Entity::Entity(double x, double y) : xPos(x), yPos(y), defaultX(0), defaultY(0), xVel(0), yVel(0), width(0), height(0),
+Entity::Entity(double x, double y) : xPos(x), yPos(y), defaultX(-1), defaultY(-1), xVel(0), yVel(0), width(0),
+                                     height(0), defaultWidth(-1), defaultHeight(-1),
                                      currentState(EntityState::UNDEFINED), alive(true), speed(0) {}
 
 bool Entity::isColliding(const Entity &entity) const {
@@ -20,8 +21,12 @@ bool Entity::isColliding(const Entity &entity) const {
 }
 
 void Entity::setDimensions(double w, double h) {
+    // Width and height being 0 means that sprite wasn't yet loaded.
     if (width == 0 || height == 0 || (w < 0 && h < 0))
         return;
+
+    auto oldWidth = width;
+    auto oldHeight = height;
 
     double ratio = height / width;
 
@@ -38,11 +43,21 @@ void Entity::setDimensions(double w, double h) {
     for (auto &sprite_type: spritesByType) {
         setSpriteSize(sprite_type.second, (int) width, (int) height);
     }
+
+    xPos = xPos + (oldWidth - width) / 2;
+    yPos = yPos + (oldHeight - height) / 2;
+
+    if (defaultWidth == -1 && defaultHeight == -1) {
+        defaultWidth = width;
+        defaultHeight = height;
+    }
 }
 
 void Entity::setPosition(double x, double y) {
-    defaultX = x;
-    defaultY = y;
+    if (defaultX == -1 && defaultY == -1) {
+        defaultX = x;
+        defaultY = y;
+    }
 
     xPos = x;
     yPos = y;
@@ -63,6 +78,7 @@ void Entity::update(unsigned int i) {
 
 void Entity::resetPos() {
     setVelocity(0, 0);
+    setDimensions(defaultWidth, defaultHeight);
     setPosition(defaultX, defaultY);
 }
 
@@ -176,6 +192,14 @@ void Paddle::moveLeft(bool pressed) {
 
 void Paddle::moveRight(bool pressed) {
     setVelocity(pressed ? speed : 0, 0);
+}
+
+void Paddle::shrink() {
+    setDimensions(width * 0.6f, height);
+}
+
+void Paddle::extend() {
+    setDimensions(width * 1.4f, height);
 }
 
 Paddle::Paddle(const Paddle &p) = default;

@@ -143,7 +143,9 @@ void GameplayGameState::onKeyPressed(FRKey key, bool pressed) {
             ball->moveWithPaddle(pressed);
         }
     } else if (key == FRKey::UP && pressed) {
-        map->trySpawnPerk(100, 0, 50);
+        paddle->extend();
+    } else if (key == FRKey::DOWN && pressed) {
+        paddle->shrink();
     }
 }
 

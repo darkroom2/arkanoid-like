@@ -8,7 +8,7 @@
 #include "../include/Map.h"
 
 
-Map::Map(int x, int y, int w, int h, int lines, int columns) : Entity(x, y), e1(r()), uniform_dist(1, 100) {
+Map::Map(double x, double y, double w, double h, int lines, int columns) : Entity(x, y), e1(r()), uniform_dist(1, 100) {
     redBricks = columns;
     greenBricks = (lines - 1) * columns;
     perkChance = 70;
@@ -16,10 +16,12 @@ Map::Map(int x, int y, int w, int h, int lines, int columns) : Entity(x, y), e1(
     width = w;
     height = h;
 
-    int brickWidth = (int) std::round((double) width / (double) columns);
+    brickWidth = std::round(width / columns);
 
     auto redBrick = std::make_unique<Brick>(0, 0, EntityColor::RED);
     redBrick->setDimensions(brickWidth, 0);
+
+    brickHeight = redBrick->height;
 
     for (int i = 0; i < redBricks; ++i) {
         auto brickCopy = std::make_unique<Brick>(*redBrick);
@@ -43,6 +45,11 @@ Map::Map(int x, int y, int w, int h, int lines, int columns) : Entity(x, y), e1(
 void Map::update(unsigned int i) {
     removeEntities();
     for (auto &b: bricks) {
+        for (const auto &p: perks) {
+            if (p->isColliding(*b)) {
+                p->yPos = b->yPos - p->height;
+            }
+        }
         b->update(i);
     }
     for (auto &p: perks) {
@@ -75,14 +82,12 @@ bool Map::isColliding(Ball &ball) {
             if (brick->color == EntityColor::GREEN) {
                 brick->takeDamage();
                 --greenBricks;
-                trySpawnPerk(brick->xPos + (double) brick->width / 2 - (double) brick->height / 2, brick->yPos,
-                             brick->height);
+                trySpawnPerk(brick->xPos + (double) brick->width / 2 - (double) brick->height / 2, brick->yPos);
                 return true;
             } else if (brick->color == EntityColor::RED && greenBricks == 0) {
                 brick->takeDamage();
                 --redBricks;
-                trySpawnPerk(brick->xPos + (double) brick->width / 2 - (double) brick->height / 2, brick->yPos,
-                             brick->height);
+                trySpawnPerk(brick->xPos + (double) brick->width / 2 - (double) brick->height / 2, brick->yPos);
                 return true;
             } else {
                 return true;
@@ -97,7 +102,7 @@ void Map::removeEntities() {
     std::erase_if(perks, [](auto &x) { return !x->alive; });
 }
 
-void Map::trySpawnPerk(double x, double y, double size) {
+void Map::trySpawnPerk(double x, double y) {
     EntityState perkType = EntityState::UNDEFINED;
 
     int perkTicket = uniform_dist(e1);
@@ -110,7 +115,7 @@ void Map::trySpawnPerk(double x, double y, double size) {
             perkType = EntityState::NEGATIVE;
         }
         auto perk = std::make_unique<Perk>(x, y, perkType);
-        perk->setDimensions(size, 0);
+        perk->setDimensions(brickHeight, 0);
         perk->setVelocity(0, width * perk->getSpeed());
         perks.push_back(std::move(perk));
     }

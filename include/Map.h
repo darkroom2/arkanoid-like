@@ -18,7 +18,7 @@ public:
 
     double perkChance;
 
-    explicit Map(int x, int y, int width, int height, int lines, int columns);
+    explicit Map(double x, double y, double width, double height, int lines, int columns);
 
     void update(unsigned int i) override;
 
@@ -28,7 +28,7 @@ public:
 
     bool winCondition() const;
 
-    void trySpawnPerk(double x, double y, double size);
+    void trySpawnPerk(double x, double y);
 
 private:
     std::random_device r;
@@ -39,6 +39,9 @@ private:
     std::vector<std::unique_ptr<Perk>> perks;
 
     void removeEntities();
+
+    double brickWidth;
+    double brickHeight;
 };
 
 

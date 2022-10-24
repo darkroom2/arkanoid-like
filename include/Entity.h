@@ -75,6 +75,8 @@ protected:
     double xVel;
     double yVel;
     double speed;
+    double defaultWidth;
+    double defaultHeight;
 };
 
 class Paddle : public Entity {
@@ -86,6 +88,10 @@ public:
     void moveLeft(bool pressed);
 
     void moveRight(bool pressed);
+
+    void shrink();
+
+    void extend();
 
 private:
     EntityState currentPerk;
