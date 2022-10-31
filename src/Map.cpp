@@ -67,7 +67,7 @@ bool Map::winCondition() const {
 bool Map::isColliding(Paddle &paddle) {
     for (auto &perk: perks) {
         if (paddle.isColliding(*perk)) {
-            paddle.addPerk(perk->currentState);
+            paddle.addEffect(perk->currentState);
             perk->takeDamage();
             return true;
         }

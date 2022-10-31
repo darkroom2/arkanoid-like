@@ -84,6 +84,9 @@ public:
 
 class Paddle : public Entity {
 public:
+    double maxWidth;
+    double minWidth;
+
     explicit Paddle(double x, double y, double speed = .001f);
 
     void moveLeft(bool pressed);
@@ -94,10 +97,7 @@ public:
 
     void extend();
 
-    void addPerk(EntityState perkType);
-
-private:
-    std::vector<std::unique_ptr<Perk>> perks;
+    void addEffect(EntityState perkType);
 };
 
 class Ball : public Entity {

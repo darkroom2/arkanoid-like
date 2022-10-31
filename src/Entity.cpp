@@ -180,6 +180,8 @@ Paddle::Paddle(double x, double y, double speed) : Entity(x, y) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("paddle", states, EntityState::NORMAL);
     Entity::speed = speed;
+    maxWidth = width * 2;
+    minWidth = width / 2;
 }
 
 void Paddle::moveLeft(bool pressed) {
@@ -191,16 +193,18 @@ void Paddle::moveRight(bool pressed) {
 }
 
 void Paddle::shrink() {
-    setDimensions(width * 0.6f, height);
+    auto newWidth = width * 0.6f;
+    setDimensions(std::max(newWidth, minWidth), height);
 }
 
 void Paddle::extend() {
-    setDimensions(width * 1.4f, height);
+    auto newWidth = width * 1.4f;
+    setDimensions(std::min(newWidth, maxWidth), height);
 }
 
-void Paddle::addPerk(EntityState perkType) {
-    // Generate effect based on perk type.
-//    std::unique_ptr<Effect> effect = createEffect(perkType);
+void Paddle::addEffect(EntityState perkType) {
+//    auto effect = createEffect(perkType);
+//    effects.push_back(effect);
     // TODO: set lifetime to perk and in paddle.update() remove lifetime and in takeDamage undo effect
     //  (shrank -> extend, extended -> shrink)
 }
