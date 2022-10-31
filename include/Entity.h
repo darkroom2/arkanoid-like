@@ -30,8 +30,6 @@ class Entity {
 public:
     explicit Entity(double x, double y);
 
-    Entity(const Entity &e);
-
     double height;
     double width;
     double xPos;
@@ -82,15 +80,11 @@ protected:
 class Perk : public Entity {
 public:
     explicit Perk(double x, double y, EntityState type, double speed = .0007f);
-
-    Perk(const Perk &p);
 };
 
 class Paddle : public Entity {
 public:
     explicit Paddle(double x, double y, double speed = .001f);
-
-    Paddle(const Paddle &p);
 
     void moveLeft(bool pressed);
 
@@ -100,7 +94,7 @@ public:
 
     void extend();
 
-    void addPerk(std::unique_ptr<Perk> perk);
+    void addPerk(EntityState perkType);
 
 private:
     std::vector<std::unique_ptr<Perk>> perks;
@@ -109,8 +103,6 @@ private:
 class Ball : public Entity {
 public:
     explicit Ball(double x, double y, double speed = .0009f);
-
-    Ball(const Ball &b);
 
     bool lossCondition() const;
 
@@ -142,8 +134,6 @@ public:
     EntityColor color;
 
     explicit Brick(double x, double y, EntityColor color);
-
-    Brick(const Brick &b);
 
     void takeDamage() override;
 };

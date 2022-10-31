@@ -120,8 +120,6 @@ double Entity::getSpeed() const {
     return speed;
 }
 
-Entity::Entity(const Entity &e) = default;
-
 
 Ball::Ball(double x, double y, double speed) : Entity(x, y), dirX(0), dirY(0), released(false), paddle(nullptr) {
     std::vector<EntityState> states{EntityState::NORMAL};
@@ -177,8 +175,6 @@ void Ball::stickTo(Paddle *p) {
     paddle = p;
 }
 
-Ball::Ball(const Ball &b) = default;
-
 
 Paddle::Paddle(double x, double y, double speed) : Entity(x, y) {
     std::vector<EntityState> states{EntityState::NORMAL};
@@ -202,10 +198,11 @@ void Paddle::extend() {
     setDimensions(width * 1.4f, height);
 }
 
-void Paddle::addPerk(std::unique_ptr<Perk> perk) {
+void Paddle::addPerk(EntityState perkType) {
+    // Generate effect based on perk type.
+//    std::unique_ptr<Effect> effect = createEffect(perkType);
     // TODO: set lifetime to perk and in paddle.update() remove lifetime and in takeDamage undo effect
-    //  (shrinked -> extend, extendended -> shrink)
-    perks.push_back(std::move(perk));
+    //  (shrank -> extend, extended -> shrink)
 }
 
 
@@ -223,13 +220,9 @@ void Brick::takeDamage() {
     }
 }
 
-Brick::Brick(const Brick &b) = default;
-
 
 Perk::Perk(double x, double y, EntityState type, double speed) : Entity(x, y) {
     std::vector<EntityState> types{EntityState::POSITIVE, EntityState::NEGATIVE};
     loadSprites("perk", types, type);
     Entity::speed = speed;
 }
-
-Perk::Perk(const Perk &p) = default;
