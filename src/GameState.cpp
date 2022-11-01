@@ -64,13 +64,11 @@ GameplayGameState::GameplayGameState(Game *game) : GameState(game) {
 
 void GameplayGameState::update(unsigned int i) {
     if (ball->lossCondition()) {
-        // this could be "loser" screen state
         std::cout << "You lost!" << std::endl;
         changeState("StartGameState");
         return;
     } else if (ball->isColliding(*paddle)) {
         if (map->winCondition()) {
-            // this could be next level state of something
             std::cout << "You won!" << std::endl;
             changeState("StartGameState");
             return;
@@ -105,21 +103,8 @@ void GameplayGameState::update(unsigned int i) {
         ball->takeDamage();
     }
 
-    if (map->isColliding(*ball)) {
-        ball->bounceY();
-    }
-
-    // TODO: logic happens inside map->isColliding but maybe wrap it in an if () and do smth.
+    map->isColliding(*ball);
     map->isColliding(*paddle);
-
-    // TODO: move this commented logic inside paddle update() function
-//    if (i > lastTime + 1000) {
-//        currentPerkTime--;
-//        if (currentPerkTime == 0) {
-////            paddle->resetPerk();
-//        }
-//        lastTime = currentTime;
-//    }
 
     map->update(i);
     ball->update(i);
@@ -159,8 +144,8 @@ void GameplayGameState::onMouseButtonClick(FRMouseButton button, bool isReleased
             ball->release();
     }
     if (button == FRMouseButton::RIGHT && isReleased) {
-        ball->resetState();
         paddle->resetState();
+        ball->resetState();
     }
 }
 

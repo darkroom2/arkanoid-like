@@ -57,7 +57,7 @@ To run the executable:
   Ability stays active for 20 seconds. Abilities are “stackable”, it means that it is possible to have multiple active
   instances of the same ability. Minimum size is 50%, maximum is 200% of a default size.
 * fix perks and ~~sprites resizing~~
-* ball reflects from block horizontal and vertical edges
+* ~~ball reflects from block horizontal and vertical edges~~
 * ball reflects from paddle depending on hitbox
 * make level switching
 * own command-line parameters parser

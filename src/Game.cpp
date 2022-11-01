@@ -19,8 +19,9 @@ void Game::addState(const std::string &name, std::unique_ptr<GameState> state) {
     states.emplace(name, std::move(state));
 }
 
-Game::~Game() = default;
 
 void Game::setCurrentState(const std::string &name) {
     currentState = states.at(name).get();
 }
+
+Game::~Game() = default;

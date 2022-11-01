@@ -5,11 +5,10 @@
 #ifndef ARKANOID_LIKE_EFFECT_H
 #define ARKANOID_LIKE_EFFECT_H
 
-
 #include "Entity.h"
 
 class Effect {
-    double timeLeft{};
+    double timeLeft;
 
 public:
     explicit Effect(double duration);
@@ -17,6 +16,8 @@ public:
     virtual void update(unsigned int i);
 
     bool isExpired() const;
+
+    virtual ~Effect();
 };
 
 
@@ -37,6 +38,5 @@ public:
 
     Paddle *paddle;
 };
-
 
 #endif //ARKANOID_LIKE_EFFECT_H

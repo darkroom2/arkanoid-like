@@ -8,23 +8,10 @@
 #include <memory>
 #include <map>
 #include <vector>
-
+#include "EntityConstants.h"
+#include "Effect.h"
 
 class Sprite;
-
-enum class EntityState {
-    NORMAL,
-    DAMAGED,
-    POSITIVE,
-    NEGATIVE,
-    UNDEFINED
-};
-
-enum class EntityColor {
-    GREEN,
-    RED,
-    UNDEFINED
-};
 
 class Entity {
 public:
@@ -98,6 +85,13 @@ public:
     void extend();
 
     void addEffect(EntityState perkType);
+
+    void setDimensions(double w, double h) override;
+
+    void update(unsigned int i) override;
+
+private:
+    std::vector<std::unique_ptr<Effect>> effects;
 };
 
 class Ball : public Entity {
@@ -137,6 +131,5 @@ public:
 
     void takeDamage() override;
 };
-
 
 #endif //ARKANOID_LIKE_ENTITY_H

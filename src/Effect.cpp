@@ -15,6 +15,8 @@ void Effect::update(unsigned int i) {
 
 Effect::Effect(double duration) : timeLeft(duration) {}
 
+Effect::~Effect() = default;
+
 
 ShrinkEffect::ShrinkEffect(double duration, Paddle *paddle) : Effect(duration), paddle(paddle) {
     paddle->shrink();

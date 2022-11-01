@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBRARIES_DIR libs)
 set(LIBRARIES Framework cxxopts)
 
-add_executable(arkanoid-like src/arkanoid-like.cpp src/GameState.cpp include/GameState.h src/Game.cpp include/Game.h src/Entity.cpp include/Entity.h src/Map.cpp include/Map.h src/SpriteLoader.cpp include/SpriteLoader.h)
+add_executable(arkanoid-like src/arkanoid-like.cpp src/GameState.cpp include/GameState.h src/Game.cpp include/Game.h src/Entity.cpp include/Entity.h src/Map.cpp include/Map.h src/SpriteLoader.cpp include/SpriteLoader.h src/Effect.cpp include/Effect.h include/EntityConstants.h)
 
 foreach (LIBRARY ${LIBRARIES})
     add_subdirectory("${LIBRARIES_DIR}/${LIBRARY}")

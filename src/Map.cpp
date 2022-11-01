@@ -78,6 +78,12 @@ bool Map::isColliding(Paddle &paddle) {
 bool Map::isColliding(Ball &ball) {
     for (const auto &brick: bricks) {
         if (ball.isColliding(*brick)) {
+            // Determine bounce direction
+            if (ball.xPos + ball.width / 2 < brick->xPos or ball.xPos + ball.width / 2 > brick->xPos + brick->width) {
+                ball.bounceX();
+            } else {
+                ball.bounceY();
+            }
             if (brick->color == EntityColor::GREEN) {
                 brick->takeDamage();
                 --greenBricks;

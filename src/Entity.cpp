@@ -176,12 +176,10 @@ void Ball::stickTo(Paddle *p) {
 }
 
 
-Paddle::Paddle(double x, double y, double speed) : Entity(x, y) {
+Paddle::Paddle(double x, double y, double speed) : Entity(x, y), minWidth(-1), maxWidth(-1) {
     std::vector<EntityState> states{EntityState::NORMAL};
     loadSprites("paddle", states, EntityState::NORMAL);
     Entity::speed = speed;
-    maxWidth = width * 2;
-    minWidth = width / 2;
 }
 
 void Paddle::moveLeft(bool pressed) {
@@ -200,6 +198,40 @@ void Paddle::shrink() {
 void Paddle::extend() {
     auto newWidth = width * 1.4f;
     setDimensions(std::min(newWidth, maxWidth), height);
+}
+
+void Paddle::addEffect(EntityState perkType) {
+    if (perkType == EntityState::NEGATIVE) {
+        effects.emplace_back({new Effect(20, EntityState::NEGATIVE)});
+        shrink();
+    } else if (perkType == EntityState::POSITIVE) {
+        effects.emplace_back({new Effect(20, EntityState::POSITIVE)});
+        extend();
+    }
+}
+
+void Paddle::setDimensions(double w, double h) {
+    Entity::setDimensions(w, h);
+    if (minWidth == -1 && maxWidth == -1) {
+        minWidth = defaultWidth / 2;
+        maxWidth = defaultWidth * 2;
+    }
+}
+//    if (perkType == EntityState::NEGATIVE) {
+//        shrink();
+//        auto effect = Effect(20.f, EntityState::NEGATIVE);
+//        effects.push_back(effect);
+//    } else if (perkType == EntityState::POSITIVE) {
+//        extend();
+//    }
+//}
+//
+void Paddle::update(unsigned int i) {
+    Entity::update(i);
+//    std::erase_if(effects, [](auto effect) { return effect.isExpired(); });
+    for (auto &effect: effects) {
+        effect->update(i);
+    }
 }
 
 void Paddle::addEffect(EntityState perkType) {
